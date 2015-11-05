@@ -1,7 +1,4 @@
 
-import java.sql.Connection;
-
-
 public class TestMain {
 
 	public static void main(String[] args) {
@@ -49,6 +46,10 @@ public class TestMain {
         	System.out.println("paper updated");
         }
         
+        System.out.println("**************Inserting the paper************");
+        if (paperDb.insertPaper(7)) {
+        	System.out.println("paper Added");
+        }
         paperDb.close();
     } 
     

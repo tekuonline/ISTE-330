@@ -2,7 +2,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.*;
 import java.sql.*;
-import java.util.Set;
+
 
 
 public class PaperDatabase{
@@ -105,9 +105,7 @@ public class PaperDatabase{
         try(PreparedStatement pstmt = this.connection.prepareStatement(select)) {
             pstmt.setString(1, user);
             res = pstmt.executeQuery();
- 
             res.next(); //username is unique
- 
             pass_salt = res.getString(1);
             pass_md5 = res.getString(2);
  
@@ -226,6 +224,21 @@ public class PaperDatabase{
       catch(Exception e){e.printStackTrace();}
       		return false;
   }
+  public boolean insertPaper(int insertPaperid) {
+	  String insertPaper = "INSERT INTO papers VALUES (?,'This is added paper','Paper added', 'inserted citation')";
+	  try(
+		       PreparedStatement s = connection.prepareStatement(insertPaper)){
+		  s.setInt(1,insertPaperid);
+		        int rs = s.executeUpdate();
+		       	return true;
+		       
+		      }
+		      catch(Exception e){
+		    	  e.printStackTrace();
+		      }
+		      		return false;
+		  }
+  
 }//end class
     
 
