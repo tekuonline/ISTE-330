@@ -14,7 +14,7 @@ public class TestMain {
 			 	System.out.println("connected to SQLServer ");
 		 }
 		
-        if (paperDb.createUser("tek", "Nepal")) {
+        if (paperDb.createUser("test", "password")) {
             System.out.println("User created");}
             else System.out.println("Can't Create User");
         
@@ -23,7 +23,7 @@ public class TestMain {
             else System.out.println("Can't Create User");
         
 
-        if (paperDb.authenticateUser("tek", "Nepal")) {
+        if (paperDb.authenticateUser("tes", "Nepal")) {
             System.out.println("User authenticated");}
             else System.out.println("Can't Authenticate User");
         
@@ -33,17 +33,21 @@ public class TestMain {
          //   System.out.println("user deleted");}
         	//else System.out.println("Can't Delete Paper");
         System.out.println("************Searching Paper By title*****************");
-        if (paperDb.searchPapersbyTitle("%th%")) {
+        if (paperDb.searchPapersbyTitle("th")) {
            }
         	else System.out.println("paper cant be found");
         
         
         System.out.println("**************Searching Paper By KeyWords************");
-        if (paperDb.searchPapersbyKeyWord("%th%")) {
+        if (paperDb.searchPapersbyKeyWord("th")) {
            }
         	else System.out.println("paper cant be found");
         
         
+        System.out.println("**************Updating the paper************");
+        if (paperDb.updatePaper(5)) {
+        	System.out.println("paper updated");
+        }
         
         paperDb.close();
     } 

@@ -6,20 +6,19 @@ import java.util.Set;
 
 
 public class PaperDatabase{
-    // database constants
+    //database constants
     private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DATABASE_URL = "jdbc:mysql://teknepal.com:3306/PAPER";
 
-    // connection object
+    //connection object
     private Connection connection;
-    // connect database
+    //connect database
     
     public Connection connect(String user, String pass) {
         if (connection == null) {
             try {
                 Class.forName(DATABASE_DRIVER);
-                connection = DriverManager.getConnection(DATABASE_URL,user,pass);
-                
+                connection = DriverManager.getConnection(DATABASE_URL,user,pass);              
                 } 
             catch ( SQLException e) {
             	System.out.println("Error  " + e.getMessage());  // delete this after all done 
@@ -38,7 +37,7 @@ public class PaperDatabase{
             try {
                 connection.close();
                 connection = null;
-                System.out.println("Closed the connection to the server");// delete this after all done 
+                System.out.println("Closed the connection to the server"); //delete this after all done 
             } catch (SQLException e) {
                 e.printStackTrace();// delete this after all done 
             }
@@ -167,7 +166,7 @@ public class PaperDatabase{
 	  String  search = "SELECT * FROM papers WHERE Title LIKE ?";
        try(
         PreparedStatement s = connection.prepareStatement(search)){
-    	s.setString(1, paper);
+    	s.setString(1, '%'+paper+'%');
        
         ResultSet rs = s.executeQuery();
         while (rs.next()) {
@@ -180,18 +179,18 @@ public class PaperDatabase{
         	System.out.println("Title: "+ title);
         	System.out.println("Abstract: "+ ab);
         	System.out.println("Citation: "+ citation);
-        	
         }
             return true;
        }
        catch(Exception e){e.printStackTrace();}
        		return false;
        }
+  
   public boolean searchPapersbyKeyWord(String paper) {  
 	  String  search = "SELECT * FROM papers WHERE abstract LIKE ?";
        try(
         PreparedStatement s = connection.prepareStatement(search)){
-    	s.setString(1, paper);
+    	s.setString(1, '%'+paper+'%');
        
         ResultSet rs = s.executeQuery();
         while (rs.next()) {
@@ -210,7 +209,23 @@ public class PaperDatabase{
        }
        catch(Exception e){e.printStackTrace();}
        		return false;
-       }
+      }
+       
+  
+  public boolean updatePaper(int updatePaperid) {
+	  
+	  String  update = "UPDATE `papers` SET `title`='Tek nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
+      try(
+       PreparedStatement s = connection.prepareStatement(update)){
+    	  s.setInt(1,updatePaperid);
+    	  System.out.println(s);
+        int rs = s.executeUpdate();
+       	return true;
+       
+      }
+      catch(Exception e){e.printStackTrace();}
+      		return false;
+  }
 }//end class
     
 
