@@ -13,11 +13,11 @@ public class TestMain {
 		
         if (paperDb.createUser("test", "password")) {
             System.out.println("User created");}
-            else System.out.println("Can't Create User");
+            else System.out.println("Can't Create Duplicaate User");
         
         if (paperDb.createUser("tes", "Nepal")) {
             System.out.println("User created");}
-            else System.out.println("Can't Create User");
+            else System.out.println("Can't Create Duplicaate User");
         
 
         if (paperDb.authenticateUser("tes", "Nepal")) {
@@ -26,9 +26,11 @@ public class TestMain {
         
         System.out.println("Trying To get papers...........");
         paperDb.getPapers();
+        
        // if (paperDb.deletePapers("Tek")) {
          //   System.out.println("user deleted");}
         	//else System.out.println("Can't Delete Paper");
+        
         System.out.println("************Searching Paper By title*****************");
         if (paperDb.searchPapersbyTitle("th")) {
            }
@@ -36,7 +38,7 @@ public class TestMain {
         
         
         System.out.println("**************Searching Paper By KeyWords************");
-        if (paperDb.searchPapersbyKeyWord("th")) {
+        if (paperDb.searchPapersbyKeyWord("Technology")) {
            }
         	else System.out.println("paper cant be found");
         
@@ -50,6 +52,7 @@ public class TestMain {
         if (paperDb.insertPaper(7)) {
         	System.out.println("paper Added");
         }
+        else System.out.println("paper cant be added.");
         paperDb.close();
     } 
     

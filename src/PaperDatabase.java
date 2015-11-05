@@ -214,10 +214,9 @@ public class PaperDatabase{
 	  
 	  String  update = "UPDATE `papers` SET `title`='Tek nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
       try(
-       PreparedStatement s = connection.prepareStatement(update)){
+    	  PreparedStatement s = connection.prepareStatement(update)){
     	  s.setInt(1,updatePaperid);
-    	  System.out.println(s);
-        int rs = s.executeUpdate();
+    	  int rs = s.executeUpdate();
        	return true;
        
       }
@@ -227,14 +226,14 @@ public class PaperDatabase{
   public boolean insertPaper(int insertPaperid) {
 	  String insertPaper = "INSERT INTO papers VALUES (?,'This is added paper','Paper added', 'inserted citation')";
 	  try(
-		       PreparedStatement s = connection.prepareStatement(insertPaper)){
-		  s.setInt(1,insertPaperid);
+			  	PreparedStatement s = connection.prepareStatement(insertPaper)){
+		  		s.setInt(1,insertPaperid);
 		        int rs = s.executeUpdate();
 		       	return true;
 		       
 		      }
 		      catch(Exception e){
-		    	  e.printStackTrace();
+		    	System.out.println(e.getMessage());
 		      }
 		      		return false;
 		  }
