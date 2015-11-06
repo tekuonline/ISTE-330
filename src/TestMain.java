@@ -1,7 +1,8 @@
 
 public class TestMain {
-
+	private static boolean auth;
 	public static void main(String[] args) {
+		
 		
 		PaperDatabase paperDb = new PaperDatabase();
 		PrimeSearch window = new PrimeSearch();
@@ -21,8 +22,12 @@ public class TestMain {
         
 
         if (paperDb.authenticateUser("tes", "Nepal")) {
-            System.out.println("User authenticated");}
-            else System.out.println("Can't Authenticate User");
+            System.out.println("User authenticated");
+            auth = true;
+            }
+            else {System.out.println("Can't Authenticate User");
+            auth = false;
+            }
         
         System.out.println("Trying To get papers...........");
         paperDb.getPapers();
@@ -44,8 +49,12 @@ public class TestMain {
         
         
         System.out.println("**************Updating the paper************");
-        if (paperDb.updatePaper(5)) {
-        	System.out.println("paper updated");
+        if(auth){
+        	if (paperDb.updatePaper(5)) {
+        		System.out.println("paper updated");
+        	}
+        }
+        else{ System.out.println("You are not authorized to update the paper!");
         }
         
         System.out.println("**************Inserting the paper************");

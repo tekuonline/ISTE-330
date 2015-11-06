@@ -3,8 +3,6 @@ import java.math.BigInteger;
 import java.security.*;
 import java.sql.*;
 
-
-
 public class PaperDatabase{
     //database constants
     private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
@@ -63,7 +61,6 @@ public class PaperDatabase{
             }
             hexString.append(hex);
         }
- 
         return hexString.toString();
     }
     
@@ -91,9 +88,8 @@ public class PaperDatabase{
             return false;
         }
     }
-    
-    
-    public boolean authenticateUser(String user, String password) {
+ 
+   public boolean authenticateUser(String user, String password) {
         String pass_md5;
         String pass_salt;
         String select;
@@ -229,19 +225,16 @@ public class PaperDatabase{
 			  	PreparedStatement s = connection.prepareStatement(insertPaper)){
 		  		s.setInt(1,insertPaperid);
 		        int rs = s.executeUpdate();
-		       	return true;
-		       
+		       	return true;  
 		      }
 		      catch(Exception e){
 		    	System.out.println(e.getMessage());
 		      }
 		      		return false;
 		  }
-  
+
 }//end class
     
-
-
 
 /*********
 CREATE TABLE users (
