@@ -142,11 +142,11 @@ public class PaperDatabase{
        } 
   
   
-  public boolean deletePapers(String username) {  
-	  String  delete = "DELETE FROM users WHERE username = ?";
+  public boolean deletePapers(int paperId) {  
+	  String  delete = "DELETE FROM papers WHERE id = ?";
        try(
         PreparedStatement s = connection.prepareStatement(delete)){
-    	s.setString(1, username);
+    	s.setInt(1, 7);
        
         s.executeUpdate();
             return true;
