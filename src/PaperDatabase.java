@@ -5,9 +5,10 @@ import java.sql.*;
 
 public class PaperDatabase{
     //database constants
+	
     private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DATABASE_URL = "jdbc:mysql://teknepal.com:3306/PAPER";
-
+    private static  String role = "public";
     //connection object
     private Connection connection;
     //connect database
@@ -65,7 +66,7 @@ public class PaperDatabase{
     }
     
     
-    public boolean createUser(String user, String password) {
+    public boolean createUser(String fname,String lname,String username,String email, String role, String password) {
         SecureRandom random;
         String insert;
         String salt;
@@ -73,14 +74,18 @@ public class PaperDatabase{
         random = new SecureRandom();
         salt =  new BigInteger(130, random).toString(16);
  
-        insert = "INSERT INTO users "
-            + "(username, pass_salt, pass_md5) "
-            + "VALUES (?, ?, ?)";
+        insert = "INSERT INTO persontest "
+            + "(fname, lname, username, email, role, pass_salt, pass_md5) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
  
-        try (PreparedStatement pstmt = this.connection.prepareStatement(insert)) {
-            pstmt.setString(1, user);
-            pstmt.setString(2, salt);
-            pstmt.setString(3, this.md5(salt + password));
+        try (PreparedStatement pstmt = connection.prepareStatement(insert)) {
+            pstmt.setString(1, fname);
+            pstmt.setString(2, lname);
+            pstmt.setString(3, username);
+            pstmt.setString(4, email);
+            pstmt.setString(5, role);
+            pstmt.setString(6, salt);
+            pstmt.setString(7, this.md5(salt + password));
             pstmt.executeUpdate();
  
             return true;
@@ -95,10 +100,10 @@ public class PaperDatabase{
         String select;
         ResultSet res;
  
-        select = "SELECT pass_salt, pass_md5 FROM users WHERE username = ?";
+        select = "SELECT pass_salt, pass_md5 FROM persontest WHERE username = ?";
         res = null;
  
-        try(PreparedStatement pstmt = this.connection.prepareStatement(select)) {
+        try(PreparedStatement pstmt = connection.prepareStatement(select)) {
             pstmt.setString(1, user);
             res = pstmt.executeQuery();
             res.next(); //username is unique
@@ -124,16 +129,22 @@ public class PaperDatabase{
     }
     
     
-  public boolean getPapers() {  
-	  String  select = "SELECT * FROM papers WHERE id = ? "; 
+  public boolean getPaper(int paperId) {  
+	  String  select = "SELECT * FROM papers WHERE id = ?"; 
        try(
-        PreparedStatement s = connection.prepareStatement(select)){
-    	s.setInt(1, 9);
-        ResultSet rs = s.executeQuery();
+        PreparedStatement pstmt = connection.prepareStatement(select)){
+    	pstmt.setInt(1, paperId);
+        ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-        	String userid = rs.getString("userid");
-        	String username = rs.getString("username");	
-        	System.out.println(userid +"  " +  username);
+        	String id = rs.getString("id");
+        	String title = rs.getString("title");
+        	String ab = rs.getString("abstract");
+        	String citation = rs.getString("citation");
+        	System.out.println("Paper ID: " + id);
+        	System.out.println("Title: "+ title);
+        	System.out.println("Abstract: "+ ab);
+        	System.out.println("Citation: "+ citation);
+        	
         }
             return true;
        }
@@ -145,24 +156,42 @@ public class PaperDatabase{
   public boolean deletePapers(int paperId) {  
 	  String  delete = "DELETE FROM papers WHERE id = ?";
        try(
-        PreparedStatement s = connection.prepareStatement(delete)){
-    	s.setInt(1, 7);
+        PreparedStatement pstmt = connection.prepareStatement(delete)){
+    	pstmt.setInt(1, 7);
        
-        s.executeUpdate();
+        pstmt.executeUpdate();
             return true;
        }
        catch(Exception e){e.printStackTrace();}
        		return false;
        } 
   
+ protected boolean getRole(String username) {  
+	  String  delete = "SELECT role FROM persontest WHERE username = ?";
+       try(
+        PreparedStatement pstmt = connection.prepareStatement(delete)){
+    	pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+        role = rs.getString("role");
+        
+        System.out.println("The role of this user is " +role);
+        }
+            return true;
+       }
+       catch(Exception e){e.printStackTrace();}
+       		return false;
+       		
+       } 
   
-  public boolean searchPapersbyTitle(String paper) {  
+  
+  public boolean searchPapersbyTitle(String paperTitle) {  
 	  String  search = "SELECT * FROM papers WHERE Title LIKE ?";
        try(
-        PreparedStatement s = connection.prepareStatement(search)){
-    	s.setString(1, '%'+paper+'%');
+        PreparedStatement pstmt = connection.prepareStatement(search)){
+    	pstmt.setString(1, '%'+paperTitle+'%');
        
-        ResultSet rs = s.executeQuery();
+        ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
         	String id = rs.getString("id");
         	String title = rs.getString("title");
@@ -180,13 +209,13 @@ public class PaperDatabase{
        		return false;
        }
   
-  public boolean searchPapersbyKeyWord(String paper) {  
+  public boolean searchPapersbyKeyWord(String paperKeyword) {  
 	  String  search = "SELECT * FROM papers WHERE abstract LIKE ?";
        try(
-        PreparedStatement s = connection.prepareStatement(search)){
-    	s.setString(1, '%'+paper+'%');
+        PreparedStatement pstmt = connection.prepareStatement(search)){
+    	pstmt.setString(1, '%'+paperKeyword+'%');
        
-        ResultSet rs = s.executeQuery();
+        ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
         	String id = rs.getString("id");
         	String title = rs.getString("title");
@@ -196,8 +225,7 @@ public class PaperDatabase{
         	System.out.println("Paper ID: " + id);
         	System.out.println("Title: "+ title);
         	System.out.println("Abstract: "+ ab);
-        	System.out.println("Citation: "+ citation);
-        	
+        	System.out.println("Citation: "+ citation);	
         }
             return true;
        }
@@ -207,31 +235,38 @@ public class PaperDatabase{
        
   
   public boolean updatePaper(int updatePaperid) {
-	  
-	  String  update = "UPDATE `papers` SET `title`='Tek nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
-      try(
-    	  PreparedStatement s = connection.prepareStatement(update)){
-    	  s.setInt(1,updatePaperid);
-    	  int rs = s.executeUpdate();
-       	return true;
-       
-      }
-      catch(Exception e){e.printStackTrace();}
-      		return false;
+	  System.out.println(role);
+		  if(role.equals("faculty")){
+		  String  update = "UPDATE `papers` SET `title`='Tek Nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
+	      try(
+	    	  PreparedStatement pstmt = connection.prepareStatement(update)){
+	    	  pstmt.setInt(1,updatePaperid);
+	    	  int rs = pstmt.executeUpdate();
+	    	  return true;
+	    	  } 
+	      	catch (Exception e) {
+	    	  e.printStackTrace();
+	    	  return false;
+	      	} 	 
+		  }  
+		  return false;
   }
-  public boolean insertPaper(int insertPaperid) {
+  	public String insertPaper(int insertPaperid) {
+    if(role.equals("faculty")){
 	  String insertPaper = "INSERT INTO papers VALUES (?,'This is added paper','Paper added', 'inserted citation')";
 	  try(
-			  	PreparedStatement s = connection.prepareStatement(insertPaper)){
-		  		s.setInt(1,insertPaperid);
-		        int rs = s.executeUpdate();
-		       	return true;  
+			  	PreparedStatement pstmt = connection.prepareStatement(insertPaper)){
+		  		pstmt.setInt(1,insertPaperid);
+		        int rs = pstmt.executeUpdate();
+		       	return "updated";  
 		      }
 		      catch(Exception e){
 		    	System.out.println(e.getMessage());
+		    	return "error updating";
 		      }
-		      		return false;
-		  }
+    		}
+		return "not authorized";
+  		}
 
 }//end class
     
