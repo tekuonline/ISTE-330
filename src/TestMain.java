@@ -15,7 +15,7 @@ public class TestMain {
 			 	System.out.println("connected to SQLServer ");
 		 }
 		
-        if (paperDb.createUser("Tim", "Nepal", "tim@rit.edu", "tim@rit.edu", "Student", "Test123")) {
+        if (paperDb.createUser("Tim", "Nepal", "test@rit.edu", "test@rit.edu", "Student", "Test123")) {
             System.out.println("User created");}
             else System.out.println("Can't Create Duplicate User");
 
@@ -25,14 +25,18 @@ public class TestMain {
             else {System.out.println("Invalid Username and or Password");
             }
         
+        
+        System.out.println("**************Role of this user************");
+        String role = paperDb.getRole(username) ;
+        System.out.println(role);
+        System.out.println("**************************");
+        
         System.out.println("Trying To get papers...........");
         paperDb.getPaper(1);  //pass paper id to get 
         
      // if (paperDb.deletePapers(7)) {
       //  System.out.println("Paper deleted");}
       //  else System.out.println("Can't Delete Paper");
-        
-        paperDb.getRole(username);
         
         System.out.println("************Searching Paper By title*****************");
         if (paperDb.searchPapersbyTitle("th")) {
@@ -54,7 +58,9 @@ public class TestMain {
         System.out.println("**************Inserting the paper************");
         String insertStatus = paperDb.insertPaper(7) ;
         System.out.println(insertStatus);
-      
+     
+        
+        
         paperDb.close();
     } 
     

@@ -2,6 +2,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PaperDatabase {
 	//database constants
@@ -127,6 +128,45 @@ public class PaperDatabase {
 		}
 	}
 
+	public String getRole(String username) {
+		String Getrole = "SELECT role FROM persontest WHERE username = ?";
+		try (
+		PreparedStatement pstmt = connection.prepareStatement(Getrole)) {
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				role = rs.getString("role");
+			}
+			return role;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "error";
+
+	}
+
+	
+	public PreparedStatement prepare(String sql, ArrayList<String> values)
+		{
+			try
+			{
+				
+				PreparedStatement statement = connection.prepareStatement(sql);
+				
+				for(int i = 1; i <= values.size(); i++)
+				{
+					statement.setString(i, values.get(i-1));
+				}
+				
+				return statement;
+			}
+			catch(SQLException e)
+			{
+				System.err.println(e.getMessage());
+				return null;
+			}
+		}// end prepare statement 
+	    
 
 	public boolean getPaper(int paperId) {
 		String select = "SELECT * FROM papers WHERE id = ?";
@@ -165,25 +205,6 @@ public class PaperDatabase {
 			e.printStackTrace();
 		}
 		return false;
-	}
-
-	protected boolean getRole(String username) {
-		String delete = "SELECT role FROM persontest WHERE username = ?";
-		try (
-		PreparedStatement pstmt = connection.prepareStatement(delete)) {
-			pstmt.setString(1, username);
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				role = rs.getString("role");
-
-				System.out.println("The role of this user is " + role);
-			}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-
 	}
 
 	public boolean searchPapersbyTitle(String paperTitle) {
