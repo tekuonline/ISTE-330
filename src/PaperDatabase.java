@@ -8,7 +8,7 @@ public class PaperDatabase {
 	//database constants
 
 	private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DATABASE_URL = "jdbc:mysql://teknepal.com:3306/PAPER";
+	private static final String DATABASE_URL = "jdbc:mysql://teknepal.com:3306/ISTE330PAPER";
 	private static String role = "public";
 	protected  boolean authenticated = false;
 
@@ -75,7 +75,7 @@ public class PaperDatabase {
 		random = new SecureRandom();
 		salt = new BigInteger(130, random).toString(16);
 
-		insert = "INSERT INTO persontest " + "(fname, lname, username, email, role, pass_salt, pass_md5) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+		insert = "INSERT INTO person " + "(fname, lname, username, email, role, pass_salt, pass_md5) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(insert)) {
 			pstmt.setString(1, fname);
@@ -99,7 +99,7 @@ public class PaperDatabase {
 		String select;
 		ResultSet res;
 
-		select = "SELECT pass_salt, pass_md5 FROM persontest WHERE username = ?";
+		select = "SELECT pass_salt, pass_md5 FROM person WHERE username = ?";
 		res = null;
 
 		try (PreparedStatement pstmt = connection.prepareStatement(select)) {
@@ -129,7 +129,7 @@ public class PaperDatabase {
 	}
 
 	public String getRole(String username) {
-		String Getrole = "SELECT role FROM persontest WHERE username = ?";
+		String Getrole = "SELECT role FROM person WHERE username = ?";
 		try (
 		PreparedStatement pstmt = connection.prepareStatement(Getrole)) {
 			pstmt.setString(1, username);
@@ -192,7 +192,6 @@ public class PaperDatabase {
 		return false;
 	}
 
-
 	public boolean deletePapers(int paperId) {
 		String delete = "DELETE FROM papers WHERE id = ?";
 		try (
@@ -231,9 +230,34 @@ public class PaperDatabase {
 		}
 		return false;
 	}
+	
+	public boolean searchPapersbyAuthor(String authorName) {
+		String authorSearch = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers`JOIN `authorship` ON authorship.personId=papers.id JOIN person ON person.`id`= authorship.personId WHERE person.fname = ?;";
+		try (
+		PreparedStatement pstmt = connection.prepareStatement(authorSearch)) {
+		pstmt.setString(1, authorName);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String id = rs.getString("id");
+				String title = rs.getString("title");
+				String ab = rs.getString("abstract");
+				String citation = rs.getString("citation");
+
+				System.out.println("Paper ID: " + id);
+				System.out.println("Title: " + title);
+				System.out.println("Abstract: " + ab);
+				System.out.println("Citation: " + citation);
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	public boolean searchPapersbyKeyWord(String paperKeyword) {
-		String search = "SELECT * FROM papers WHERE abstract LIKE ?";
+		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers` INNER JOIN paper_keywords ON papers.id=paper_keywords.id WHERE paper_keywords.keyword LIKE ?;";
+		
 		try (
 		PreparedStatement pstmt = connection.prepareStatement(search)) {
 			pstmt.setString(1, '%' + paperKeyword + '%');
@@ -259,7 +283,7 @@ public class PaperDatabase {
 
 
 	public String updatePaper(int updatePaperid) {
-		if (role.equals("faculty") && (authenticated == true)) {
+		if (role.equalsIgnoreCase("faculty") && (authenticated == true)) {
 			String update = "UPDATE `papers` SET `title`='Tek Nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
 			try (
 			PreparedStatement pstmt = connection.prepareStatement(update)) {
@@ -273,9 +297,11 @@ public class PaperDatabase {
 		}
 		return "You are not authorized to update the paper!";
 	}
+	
 	public String insertPaper(int insertPaperid) {
-		if (role.equals("faculty") && (authenticated == true)) {
+		if (role.equalsIgnoreCase("faculty") && (authenticated == true)) {
 			String insertPaper = "INSERT INTO papers VALUES (?,'This is added paper','Paper added', 'inserted citation')";
+			
 			try (
 			PreparedStatement pstmt = connection.prepareStatement(insertPaper)) {
 				pstmt.setInt(1, insertPaperid);
@@ -293,7 +319,7 @@ public class PaperDatabase {
 
 
 /*********
-CREATE TABLE `persontest` (
+CREATE TABLE `person` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fName` varchar(45) NOT NULL DEFAULT '',
   `lName` varchar(45) NOT NULL DEFAULT '',
@@ -303,6 +329,6 @@ CREATE TABLE `persontest` (
   `pass_salt` tinyblob NOT NULL,
   `pass_md5` tinyblob NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `uc_usernameemail` (`username`,`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=latin1;
 */
