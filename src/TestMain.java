@@ -45,7 +45,7 @@ public class TestMain {
 			System.out.println("paper cant be found");
 
 		System.out.println("**************Searching Paper By KeyWords************");
-		if (paperDb.searchPapersbyKeyWord("c#")) {
+		if (paperDb.searchPapersbyKeyWord("tek")) {
 		} else
 			System.out.println("paper cant be found");
 		
@@ -61,6 +61,15 @@ public class TestMain {
 		System.out.println("**************Inserting the paper************");
 		String insertStatus = paperDb.insertPaper(7);
 		System.out.println(insertStatus);
+		
+		System.out.println("**************Inserting Keywords************");
+		String insertKeywordStatus = paperDb.insertKeywords(7, "javatest");
+		System.out.println(insertKeywordStatus);
+		
+		
+		System.out.println("**************All My Papers************");
+		String myPapers = paperDb.getMyPapers(username);
+			System.out.println(myPapers);
 
 		paperDb.close();
 	}
