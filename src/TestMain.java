@@ -1,5 +1,5 @@
 public class TestMain {
-	private static String username = "test@rit.edu";
+	private static String username = "tst@rit.edu";
 	private static String password = "Test123";
 
 	public static void main(String[] args) {
@@ -17,7 +17,6 @@ public class TestMain {
 			System.out.println("User created");
 		} else
 			System.out.println("Can't Create Duplicate User");
-		
 
 		System.out.println("**************Authenticating User************");
 		if (paperDb.authenticateUser(username, password)) {
@@ -44,12 +43,14 @@ public class TestMain {
 		} else
 			System.out.println("paper cant be found");
 
-		System.out.println("**************Searching Paper By KeyWords************");
+		System.out
+				.println("**************Searching Paper By KeyWords************");
 		if (paperDb.searchPapersbyKeyWord("tek")) {
 		} else
 			System.out.println("paper cant be found");
-		
-		System.out.println("**************Searching Paper By Author************");
+
+		System.out
+				.println("**************Searching Paper By Author************");
 		if (paperDb.searchPapersbyAuthor("Tek")) {
 		} else
 			System.out.println("paper cant be found");
@@ -61,15 +62,14 @@ public class TestMain {
 		System.out.println("**************Inserting the paper************");
 		String insertStatus = paperDb.insertPaper(7);
 		System.out.println(insertStatus);
-		
+
 		System.out.println("**************Inserting Keywords************");
 		String insertKeywordStatus = paperDb.insertKeywords(7, "javatest");
 		System.out.println(insertKeywordStatus);
-		
-		
+
 		System.out.println("**************All My Papers************");
 		String myPapers = paperDb.getMyPapers(username);
-			System.out.println(myPapers);
+		System.out.println(myPapers);
 
 		paperDb.close();
 	}

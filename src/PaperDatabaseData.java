@@ -5,6 +5,7 @@ public class PaperDatabaseData {
 	private boolean authenticated;
 	private Connection connection;
 
+
 	public PaperDatabaseData(boolean authenticated) {
 		this.authenticated = authenticated;
 	}
