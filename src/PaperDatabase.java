@@ -1,3 +1,9 @@
+
+/**
+ * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ *
+ */
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;

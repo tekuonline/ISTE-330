@@ -1,3 +1,10 @@
+
+/**
+ * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ *
+ */
+
+
 import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -38,7 +45,7 @@ public class PrimeSearch implements MenuListener, ActionListener {
 	private void initialize() {
 		frmResearchPaperDatabase = new JFrame();
 		frmResearchPaperDatabase.setTitle("Research Paper Database");
-		frmResearchPaperDatabase.setBounds(100, 100, 450, 300);
+		frmResearchPaperDatabase.setBounds(200, 200, 450, 300);
 		frmResearchPaperDatabase.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmResearchPaperDatabase.setLocationRelativeTo(null);
 		
@@ -66,23 +73,26 @@ public class PrimeSearch implements MenuListener, ActionListener {
 		btnLogin.addActionListener(this);
 		jpButtons.add(btnLogin);
 		
-		JPanel jpSearchPane = new JPanel();
-		frmResearchPaperDatabase.getContentPane().add(jpSearchPane, BorderLayout.CENTER);
-		jpSearchPane.setLayout(new BoxLayout(jpSearchPane, BoxLayout.Y_AXIS));
+		
+		JPanel rightPanel = new JPanel();
+		
+		JPanel leftPanel = new JPanel();
+		
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		
 		JPanel jpTitleSearch = new JPanel();
 		JLabel jlTitle = new JLabel("Title:     ");
 		jpTitleSearch.add(jlTitle);
 		jtfTitle = new JTextField(" Title          ");
 		jpTitleSearch.add(jtfTitle);
-		jpSearchPane.add(jpTitleSearch);
+		leftPanel.add(jpTitleSearch);
 
 		JPanel jpAuthorSearch = new JPanel();
 		JLabel jlAuthor = new JLabel("Author:   ");
 		jpAuthorSearch.add(jlAuthor);
 		jtfAuthor = new JTextField(" Author         ");
 		jpAuthorSearch.add(jtfAuthor);
-		jpSearchPane.add(jpAuthorSearch);
+		leftPanel.add(jpAuthorSearch);
 
 		JPanel jpWordSearch = new JPanel();
 		JLabel jlWord = new JLabel("Keyword(s): ");
@@ -90,7 +100,20 @@ public class PrimeSearch implements MenuListener, ActionListener {
 		jtfWord = new JTextField(" Keyword(s)       ");
 		jtfWord.setToolTipText("Separate multiple keywords by a comma.");
 		jpWordSearch.add(jtfWord);
-		jpSearchPane.add(jpWordSearch);
+		leftPanel.add(jpWordSearch);
+		
+		JPanel jpWordSearch1 = new JPanel();
+		JLabel jlWord1 = new JLabel("Keyword(s): ");
+		jpWordSearch1.add(jlWord1);
+		JTextField jtfWord1 = new JTextField(" Keyword(s)       ");
+		jpWordSearch1.add(jtfWord);
+		rightPanel.add(jpWordSearch);
+		
+		
+		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+		frmResearchPaperDatabase.getContentPane().add(leftPanel, BorderLayout.CENTER);
+		
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmResearchPaperDatabase.setJMenuBar(menuBar);	

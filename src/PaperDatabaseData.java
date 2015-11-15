@@ -1,5 +1,10 @@
-import java.sql.Connection;
 
+/**
+ * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ *
+ */
+
+import java.sql.Connection;
 
 public class PaperDatabaseData {
 	private boolean authenticated;

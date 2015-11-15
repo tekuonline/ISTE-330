@@ -1,12 +1,16 @@
+/**
+ * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ *
+ */
 public class TestMain {
-	private static String username = "tst@rit.edu";
+	private static String username = "tet@rit.edu";
 	private static String password = "Test123";
 
 	public static void main(String[] args) {
 
 		PaperDatabase paperDb = new PaperDatabase();
-		// PrimeSearch window = new PrimeSearch();
-		// window.frmResearchPaperDatabase.setVisible(true);
+		TestGUI window = new TestGUI();
+		 window.frmResearchPaperDatabase.setVisible(true);
 
 		if (paperDb.connect("teku", "Test123") != null) {
 			System.out.println("connected to SQLServer ");

@@ -1,3 +1,7 @@
+/**
+ * @author TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ *
+ */
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -16,7 +20,7 @@ public class LoginWindow {
 
 	private JFrame frame;
 
-	public LoginWindow(PrimeSearch ps) {
+	public LoginWindow(TestGUI testGUI) {
 		initialize();
 	}
 
