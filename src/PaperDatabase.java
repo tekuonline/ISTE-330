@@ -16,7 +16,12 @@ public class PaperDatabase implements Authenticate {
 	// database constants
 
 	protected PaperDatabaseData paperdata = new PaperDatabaseData(false);
-
+/**
+ * Connect to the database 
+ * @param user
+ * @param pass
+ * @return
+ */
 	public Connection connect(String user, String pass) {
 		if (paperdata.getConnection() == null) {
 			try {
@@ -24,36 +29,36 @@ public class PaperDatabase implements Authenticate {
 				paperdata.setConnection(DriverManager.getConnection(
 						DATABASE_URL, user, pass));
 			} catch (SQLException e) {
-				System.out.println("Error  " + e.getMessage()); // delete this
-																// after all
-																// done
+				System.out.println("Error  " + e.getMessage()); // delete this after all done
 				e.printStackTrace(); // delete this after all done
 			} catch (ClassNotFoundException ex) {
-				System.out.println("Error  " + ex.getMessage()); // delete this
-																	// after all
-																	// done
+				System.out.println("Error  " + ex.getMessage()); // delete this after all done
 			}
 		}
 		return paperdata.getConnection();
 	}
 
-	// close database connection
+	/**
+	 * Close connection to the database
+	 */
 	public void close() {
 		if (paperdata.getConnection() != null) {
 			try {
 				paperdata.getConnection().close();
 				paperdata.setConnection(null);
-				System.out.println("Closed the connection to the server"); // delete
-																			// this
-																			// after
-																			// all
-																			// done
+				System.out.println("Closed the connection to the server"); // delete this after all done
 			} catch (SQLException e) {
 				e.printStackTrace(); // delete this after all done
 			}
 		}
 	}
-
+/**
+ * Encodes the String using MD5 for password.
+ * @param aString
+ * @return
+ * @throws NoSuchAlgorithmException
+ * @throws UnsupportedEncodingException
+ */
 	private String md5(String aString) throws NoSuchAlgorithmException,
 			UnsupportedEncodingException {
 		MessageDigest md;
@@ -76,6 +81,16 @@ public class PaperDatabase implements Authenticate {
 		}
 		return hexString.toString();
 	}
+	/**
+	 * Creates a new user.
+	 * @param fname
+	 * @param lname
+	 * @param username
+	 * @param email
+	 * @param role
+	 * @param password
+	 * @return
+	 */
 
 	public boolean createUser(String fname, String lname, String username,
 			String email, String role, String password) {
@@ -108,9 +123,8 @@ public class PaperDatabase implements Authenticate {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
+	 * Authenticates the user 
 	 * @see Authenticate#authenticateUser(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -150,6 +164,11 @@ public class PaperDatabase implements Authenticate {
 			}
 		}
 	}
+	/**
+	 * Gets the user role based on username. 
+	 * @param username
+	 * @return
+	 */
 
 	public String getRole(String username) {
 		String Getrole = "SELECT role FROM person WHERE username = ?";
@@ -166,6 +185,11 @@ public class PaperDatabase implements Authenticate {
 		return "error";
 	}
 
+	/**
+	 * prepares the statement
+	 * @param sql
+	 * @return
+	 */
 	private PreparedStatement prepare(String sql) {
 		try {
 			PreparedStatement statement = paperdata.getConnection()
@@ -177,6 +201,11 @@ public class PaperDatabase implements Authenticate {
 		}
 	}// end prepare statement
 
+	/**
+	 * gets the paper using paper id. 
+	 * @param paperId
+	 * @return
+	 */
 	public boolean getPaper(int paperId) {
 		String select = "SELECT * FROM papers WHERE id = ?";
 		try {
@@ -201,7 +230,11 @@ public class PaperDatabase implements Authenticate {
 		}
 		return false;
 	}
-
+/**
+ * Delete the paper using paper id
+ * @param paperId
+ * @return
+ */
 	public boolean deletePapers(int paperId) {
 		String delete = "DELETE FROM papers WHERE id = ?";
 		try {
@@ -215,7 +248,11 @@ public class PaperDatabase implements Authenticate {
 		}
 		return false;
 	}
-
+/**
+ * Finds the paper using the paperTitle
+ * @param paperTitle
+ * @return
+ */
 	public boolean searchPapersbyTitle(String paperTitle) {
 		String search = "SELECT * FROM papers WHERE Title LIKE ?";
 		try (PreparedStatement pstmt = prepare(search)) {
@@ -239,7 +276,11 @@ public class PaperDatabase implements Authenticate {
 		}
 		return false;
 	}
-
+/**
+ * Search paper using auther name. 
+ * @param authorName
+ * @return
+ */
 	public boolean searchPapersbyAuthor(String authorName) {
 		String authorSearch = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers`JOIN `authorship` ON authorship.personId=papers.id JOIN person ON person.`id`= authorship.personId WHERE person.fname = ?;";
 		try (PreparedStatement pstmt = prepare(authorSearch)) {
@@ -262,7 +303,11 @@ public class PaperDatabase implements Authenticate {
 		}
 		return false;
 	}
-
+/**
+ * Search paper using keyword.  
+ * @param paperKeyword
+ * @return
+ */
 	public boolean searchPapersbyKeyWord(String paperKeyword) {
 		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers` INNER JOIN paper_keywords ON papers.id=paper_keywords.id WHERE paper_keywords.keyword LIKE ?;";
 
@@ -287,13 +332,20 @@ public class PaperDatabase implements Authenticate {
 		}
 		return false;
 	}
-
-	public String updatePaper(int updatePaperid) {
+/**
+ * update paper using paperID
+ * @param updatePaperid
+ * @return
+ */
+	public String updatePaper(int updatePaperid, String title, String abst, String citation) {
 		if (role.equalsIgnoreCase("faculty")
 				&& (paperdata.isAuthenticated() == true)) {
-			String update = "UPDATE `papers` SET `title`='Tek Nepal was a nice guy',`abstract`='its working',`citation`='Whats up?' WHERE id = ?;";
+			String update = "UPDATE `papers` SET `title`=?,`abstract`=?,`citation`=? WHERE id = ?;";
 			try (PreparedStatement pstmt = prepare(update)) {
-				pstmt.setInt(1, updatePaperid);
+				pstmt.setInt(4, updatePaperid);
+				pstmt.setString(1, title);
+				pstmt.setString(2, abst);
+				pstmt.setString(3, citation);
 				int rs = pstmt.executeUpdate();
 				return "Paper " + updatePaperid + " Updated";
 			} catch (SQLException e) {
@@ -303,14 +355,24 @@ public class PaperDatabase implements Authenticate {
 		}
 		return "You are not authorized to update the paper!";
 	}
-
-	public String insertPaper(int insertPaperid) {
+/**
+ * 
+ * @param insertPaperid
+ * @param title
+ * @param abst
+ * @param citation
+ * @return
+ */
+	public String insertPaper(int insertPaperid, String title, String abst, String citation) {
 		if (role.equalsIgnoreCase("faculty")
 				&& (paperdata.isAuthenticated() == true)) {
-			String insertPaper = "INSERT INTO papers VALUES (?,'This is added paper','Paper added', 'inserted citation')";
+			String insertPaper = "INSERT INTO papers VALUES (?,?,?,?)";
 
 			try (PreparedStatement pstmt = prepare(insertPaper)) {
 				pstmt.setInt(1, insertPaperid);
+				pstmt.setString(2, title);
+				pstmt.setString(3, abst);
+				pstmt.setString(4, citation);
 				int rs = pstmt.executeUpdate();
 				return "Paper " + insertPaperid + " Inserted";
 			} catch (SQLException e) {
@@ -319,7 +381,12 @@ public class PaperDatabase implements Authenticate {
 		}
 		return "you are not authorized to add papers";
 	}
-
+/**
+ * insert keywords
+ * @param insertPaperid
+ * @param Keyword
+ * @return
+ */
 	public String insertKeywords(int insertPaperid, String Keyword) {
 		if (role.equalsIgnoreCase("faculty")
 				&& (paperdata.isAuthenticated() == true)) {
@@ -338,9 +405,14 @@ public class PaperDatabase implements Authenticate {
 		}
 		return "you are not authorized to add Keywords";
 	}
-
+/**
+ * get all the papers for the logged in user. 
+ * @param username
+ * @return
+ */
 	public String getMyPapers(String username) {
-		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers` JOIN `authorship` ON authorship.personId=papers.id  JOIN person ON person.`id`= authorship.personId  WHERE person.username = ?;";
+		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From "
+				+ "`papers` JOIN `authorship` ON authorship.personId=papers.id  JOIN person ON person.`id`= authorship.personId  WHERE person.username = ?;";
 
 		try (PreparedStatement pstmt = prepare(search)) {
 			pstmt.setString(1, username);

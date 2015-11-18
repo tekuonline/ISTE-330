@@ -167,7 +167,7 @@ public class TestGUI implements MenuListener, ActionListener {
 		if(ae.getActionCommand() == ("Reset") || ae.getActionCommand() == "Clear") {
 			jtfTitle.setText(" ");
 			jtfAuthor.setText("");
-			jtfWord.setText("");
+			//jtfWord.setText("");
 		}
 		else if(ae.getActionCommand() =="Exit") {
 			System.exit(0);

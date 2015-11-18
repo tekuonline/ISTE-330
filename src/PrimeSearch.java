@@ -150,7 +150,7 @@ public class PrimeSearch implements MenuListener, ActionListener {
 		}
 		else if(ae.getActionCommand() == "Login...") {
 			frmResearchPaperDatabase.setVisible(false);
-			LoginWindow lw = new LoginWindow(this);			
+			//LoginWindow lw = new LoginWindow(this);			
 		}
 	}
 

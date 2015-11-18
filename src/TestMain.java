@@ -3,13 +3,13 @@
  *
  */
 public class TestMain {
-	private static String username = "tet@rit.edu";
+	private static String username = "tn2089@rit.edu";
 	private static String password = "Test123";
 
 	public static void main(String[] args) {
 
 		PaperDatabase paperDb = new PaperDatabase();
-		TestGUI window = new TestGUI();
+		 TestGUI window = new TestGUI();
 		 window.frmResearchPaperDatabase.setVisible(true);
 
 		if (paperDb.connect("teku", "Test123") != null) {
@@ -60,11 +60,11 @@ public class TestMain {
 			System.out.println("paper cant be found");
 
 		System.out.println("**************Updating the paper************");
-		String updateStatus = paperDb.updatePaper(5);
+		String updateStatus = paperDb.updatePaper(5, "test", "test", "test");
 		System.out.println(updateStatus);
 
 		System.out.println("**************Inserting the paper************");
-		String insertStatus = paperDb.insertPaper(7);
+		String insertStatus = paperDb.insertPaper(10, "test", "test", "test");
 		System.out.println(insertStatus);
 
 		System.out.println("**************Inserting Keywords************");
