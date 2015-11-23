@@ -11,6 +11,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -31,6 +32,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 import Presentation.*;
@@ -51,14 +54,16 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	private JMenu mnHelp = new JMenu("Help");
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
-   
+	private JScrollPane JScrollPane;
+ 
+	
    //search control attributes
 	private JTextField txtKeyword;
 	private JTextField txtTitle;
 	private JTextField txtAuthor;
-   private JLabel lblKeyword = new JLabel("Keyword:");
-   private JLabel lblAuthor = new JLabel("Author:");
-   private JLabel lblTitle = new JLabel("Title:");	
+	private JLabel lblKeyword = new JLabel("Keyword:");
+	private JLabel lblAuthor = new JLabel("Author:");
+	private JLabel lblTitle = new JLabel("Title:");	
 	
 	// title panel attributes
 	private JPanel jPanelTitle = new JPanel();
@@ -135,7 +140,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		 * contains title and greeting message for Paper users	
 		 */
 		paperDb.connect("teku", "Test123");
-		lblHello = new JLabel("Hello! "+ paperDb.getRole("tn2089@rit.edu"));
+		lblHello = new JLabel("Hello! "+ paperDb.getRole(""));
 		contentPane.add(jPanelTitle, BorderLayout.NORTH);
 		jPanelTitle.setLayout(new GridLayout(2,1));		
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -189,9 +194,10 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	
 		txtResultList.setWrapStyleWord(true);
 		txtResultList.setLineWrap(true);
-		txtResultList.add(new JScrollBar());
+//		txtResultList.add(new JScrollBar());
 		txtResultList.setText("ResultShowsHere");
-		contentPane.add(txtResultList, BorderLayout.CENTER);
+		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		contentPane.add(JScrollPane, BorderLayout.CENTER);
 		//txtKeyword.setColumns(10);
 	
 	}
@@ -205,10 +211,28 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			}
 		else if(ae.getActionCommand() =="Search") {
 			String authorName = txtAuthor.getText();
+			String title = txtTitle.getText();
+			String keyWords = txtTitle.getText();
+			
 			paperDb.connect("teku", "Test123");
-			System.out.println(authorName);
-			String paper = paperDb.searchPapersbyAuthor(authorName);
-			txtResultList.setText(paper);
+			ArrayList<String> paperBytitle = paperDb.searchPapersbyTitle(title);
+			ArrayList<String> paperByAuthor = paperDb.searchPapersbyTitle(authorName);
+			ArrayList<String> paperByKeyword = paperDb.searchPapersbyTitle(keyWords);
+			
+			txtResultList.setText("");
+			for(int i = 0; i < paperBytitle.size(); i++) {
+				  System.out.println(paperBytitle.get(i)); 
+				  txtResultList.append(paperBytitle.get(i)  + "\n");
+				}
+			for(int i = 0; i < paperByAuthor.size(); i++) {
+				  System.out.println(paperByAuthor.get(i)); 
+				  txtResultList.append(paperByAuthor.get(i)  + "\n");
+				}
+			for(int i = 0; i < paperByKeyword.size(); i++) {
+				  System.out.println(paperByKeyword.get(i)); 
+				  txtResultList.append(paperByKeyword.get(i)  + "\n");
+				}
+			
 			
 		
 		}

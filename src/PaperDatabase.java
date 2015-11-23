@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PaperDatabase implements Authenticate {
 	private static String role = "public";
@@ -256,7 +257,8 @@ public class PaperDatabase implements Authenticate {
  * @param paperTitle
  * @return
  */
-	public boolean searchPapersbyTitle(String paperTitle) {
+	public ArrayList<String> searchPapersbyTitle(String paperTitle) {
+		ArrayList<String> paperByTitle = new ArrayList<String>();
 		String search = "SELECT * FROM papers WHERE Title LIKE ?";
 		try (PreparedStatement pstmt = prepare(search)) {
 			pstmt.setString(1, '%' + paperTitle + '%');
@@ -267,26 +269,29 @@ public class PaperDatabase implements Authenticate {
 				String title = rs.getString("title");
 				String ab = rs.getString("abstract");
 				String citation = rs.getString("citation");
-
-				System.out.println("Paper ID: " + id);
-				System.out.println("Title: " + title);
-				System.out.println("Abstract: " + ab);
-				System.out.println("Citation: " + citation);
+				
+				//System.out.println("Paper ID: " + id);
+				//System.out.println("Title: " + title);
+				//System.out.println("Abstract: " + ab);
+				//System.out.println("Citation: " + citation);
+				paperByTitle.add(id);
+				paperByTitle.add(title);
+				paperByTitle.add(ab);
+				paperByTitle.add(citation);
 			}
-			return true;
+			return paperByTitle;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 /**
  * Search paper using auther name. 
  * @param authorName
  * @return
  */
-	public String searchPapersbyAuthor(String authorName) {
-		System.out.println(authorName);
-		String paper = null;
+	public ArrayList<String> searchPapersbyAuthor(String authorName) {
+		ArrayList<String> paperByAuthor = new ArrayList<String>();
 		String authorSearch = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers`JOIN `authorship` ON authorship.personId=papers.id JOIN person ON person.`id`= authorship.personId WHERE person.fname = ?;";
 		try (PreparedStatement pstmt = prepare(authorSearch)) {
 			pstmt.setString(1, authorName);
@@ -301,9 +306,13 @@ public class PaperDatabase implements Authenticate {
 				System.out.println("Title: " + title);
 				System.out.println("Abstract: " + ab);
 				System.out.println("Citation: " + citation);
-				paper = id + title + ab + citation;
+
+				paperByAuthor.add(id);
+				paperByAuthor.add(title);
+				paperByAuthor.add(ab);
+				paperByAuthor.add(citation);
 			}
-			return paper;
+			return paperByAuthor;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -314,7 +323,8 @@ public class PaperDatabase implements Authenticate {
  * @param paperKeyword
  * @return
  */
-	public boolean searchPapersbyKeyWord(String paperKeyword) {
+	public ArrayList<String> searchPapersbyKeyWord(String paperKeyword) {
+		ArrayList<String> paperByKeyWords = new ArrayList<String>();
 		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers` INNER JOIN paper_keywords ON papers.id=paper_keywords.id WHERE paper_keywords.keyword LIKE ?;";
 
 		try (PreparedStatement pstmt = prepare(search)) {
@@ -331,12 +341,51 @@ public class PaperDatabase implements Authenticate {
 				System.out.println("Title: " + title);
 				System.out.println("Abstract: " + ab);
 				System.out.println("Citation: " + citation);
+				paperByKeyWords.add(id);
+				paperByKeyWords.add(title);
+				paperByKeyWords.add(ab);
+				paperByKeyWords.add(citation);
 			}
-			return true;
+			return paperByKeyWords;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
+	}
+	/**
+	 * 
+	 * @param paperKeyword
+	 * @return
+	 */
+	public ArrayList<String> searchPapersAll(String paperKeyword, String paperAuthor, String paperTitle) {
+		ArrayList<String> searchPapersAll = new ArrayList<String>();
+		String search = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers` "
+				+ "INNER JOIN paper_keywords ON papers.id=paper_keywords.id WHERE paper_keywords.keyword LIKE ?;";
+
+		try (PreparedStatement pstmt = prepare(search)) {
+			pstmt.setString(1, '%' + paperKeyword + '%');
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String id = rs.getString("id");
+				String title = rs.getString("title");
+				String ab = rs.getString("abstract");
+				String citation = rs.getString("citation");
+
+				System.out.println("Paper ID: " + id);
+				System.out.println("Title: " + title);
+				System.out.println("Abstract: " + ab);
+				System.out.println("Citation: " + citation);
+				searchPapersAll.add(id);
+				searchPapersAll.add(title);
+				searchPapersAll.add(ab);
+				searchPapersAll.add(citation);
+			}
+			return searchPapersAll;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 /**
  * update paper using paperID
@@ -440,6 +489,23 @@ public class PaperDatabase implements Authenticate {
 		}
 		return "Could not find your papers";
 	}
+
+public static String getRole() {
+	return role;
+}
+
+public static void setRole(String role) {
+	PaperDatabase.role = role;
+}
+
+public Connection getConnection() {
+	return connection;
+}
+
+public void setConnection(Connection connection) {
+	this.connection = connection;
+}
+
 
 } // end class
 

@@ -79,32 +79,14 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
    private JButton btnUpdate = new JButton("Update");
    private JButton btnDelete = new JButton("Delete");
 
-   /**
-    * Main Method
-    */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FacultySearch frame = new FacultySearch();
-					frame.setVisible(true);
-					//frame.initialize();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	// Create the frame.
 	public FacultySearch() {
 		setTitle("Faculty/Student Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 635, 355);
-	//}
-	
-	//public void initialize(){
 
+
+		
 		/**
 		 *  Menu bar content
 		 */
