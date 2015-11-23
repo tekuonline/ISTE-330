@@ -1,3 +1,10 @@
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.event.MenuListener;
+
+import Presentation.*;
+
 /**
  * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
  *
@@ -9,19 +16,21 @@ public class TestMain {
 	public static void main(String[] args) {
 
 		PaperDatabase paperDb = new PaperDatabase();
-		 TestGUI window = new TestGUI();
-		 window.frmResearchPaperDatabase.setVisible(true);
+		//PublicSearch ps = new PublicSearch();
+
 
 		if (paperDb.connect("teku", "Test123") != null) {
 			System.out.println("connected to SQLServer ");
 		}
+		
 		System.out.println("**************Creating User************");
-		if (paperDb.createUser("Tek", "Nepal", "tn2089@rit.edu", "Test123",
-				"faculty", "Test123")) {
+		if (paperDb.createUser("Tek", "Nepal", "tn", "Test123",
+				"admin", "Test123")) {
 			System.out.println("User created");
 		} else
 			System.out.println("Can't Create Duplicate User");
 
+		
 		System.out.println("**************Authenticating User************");
 		if (paperDb.authenticateUser(username, password)) {
 			System.out.println("User authenticated");
@@ -55,8 +64,8 @@ public class TestMain {
 
 		System.out
 				.println("**************Searching Paper By Author************");
-		if (paperDb.searchPapersbyAuthor("Tek")) {
-		} else
+		//if (paperDb.searchPapersbyAuthor("Tek")) {
+		//} else
 			System.out.println("paper cant be found");
 
 		System.out.println("**************Updating the paper************");

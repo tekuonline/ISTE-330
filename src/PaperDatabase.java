@@ -13,6 +13,7 @@ import java.sql.*;
 
 public class PaperDatabase implements Authenticate {
 	private static String role = "public";
+	Connection connection; 
 	// database constants
 
 	protected PaperDatabaseData paperdata = new PaperDatabaseData(false);
@@ -93,7 +94,8 @@ public class PaperDatabase implements Authenticate {
 	 */
 
 	public boolean createUser(String fname, String lname, String username,
-			String email, String role, String password) {
+		String email, String role, String password) {
+		//paperdata.setConnection(connection);
 		SecureRandom random;
 		String insert;
 		String salt;
@@ -119,6 +121,7 @@ public class PaperDatabase implements Authenticate {
 			return true;
 		} catch (NoSuchAlgorithmException | SQLException
 				| UnsupportedEncodingException ex) {
+			ex.printStackTrace();
 			return false;
 		}
 	}
@@ -281,7 +284,9 @@ public class PaperDatabase implements Authenticate {
  * @param authorName
  * @return
  */
-	public boolean searchPapersbyAuthor(String authorName) {
+	public String searchPapersbyAuthor(String authorName) {
+		System.out.println(authorName);
+		String paper = null;
 		String authorSearch = "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From `papers`JOIN `authorship` ON authorship.personId=papers.id JOIN person ON person.`id`= authorship.personId WHERE person.fname = ?;";
 		try (PreparedStatement pstmt = prepare(authorSearch)) {
 			pstmt.setString(1, authorName);
@@ -296,12 +301,13 @@ public class PaperDatabase implements Authenticate {
 				System.out.println("Title: " + title);
 				System.out.println("Abstract: " + ab);
 				System.out.println("Citation: " + citation);
+				paper = id + title + ab + citation;
 			}
-			return true;
+			return paper;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 /**
  * Search paper using keyword.  

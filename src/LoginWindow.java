@@ -21,6 +21,7 @@ public class LoginWindow {
 	private JFrame frame;
 
 	public LoginWindow(TestGUI testGUI) {
+		
 		initialize();
 	}
 
@@ -31,6 +32,7 @@ public class LoginWindow {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 
 		JPanel LoginBanner = new JPanel();
 		LoginBanner.setBorder(new BevelBorder(BevelBorder.RAISED, null, null,
