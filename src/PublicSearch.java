@@ -6,6 +6,7 @@
  * A class for Public Search Window
  */
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -103,7 +104,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		setTitle("Public Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 593, 355);
-		 setSize(900,500);
+		setSize(900,500);
 	//}
 	
 	//public void initialize(){
@@ -139,12 +140,13 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		 * North panel called jPanelTitle
 		 * contains title and greeting message for Paper users	
 		 */
-		paperDb.connect("teku", "Test123");
-		lblHello = new JLabel("Hello! "+ paperDb.getRole(""));
+		paperDb.connect();
+		lblHello = new JLabel("Hello! "+ "user");
 		contentPane.add(jPanelTitle, BorderLayout.NORTH);
 		jPanelTitle.setLayout(new GridLayout(2,1));		
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblWelcome.setForeground (Color.red);
 		jPanelTitle.add(lblWelcome);		
 		lblHello.setHorizontalAlignment(SwingConstants.TRAILING);
 		jPanelTitle.add(lblHello);
@@ -160,20 +162,20 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		jPanelSearchArea.add(lblKeyword);
 		txtKeyword = new JTextField();
 		txtKeyword.setPreferredSize(new Dimension(150,20));
-		txtKeyword.setText("Keyword");
+		txtKeyword.setText("");
 		jPanelSearchArea.add(txtKeyword);
         txtKeyword.setColumns(10);	
 		
 		jPanelSearchArea.add(lblTitle);
 		txtTitle = new JTextField();
-		txtTitle.setText("Title");
+		txtTitle.setText("");
 		jPanelSearchArea.add(txtTitle);
 		
 		txtTitle.setColumns(10);
 		
 		jPanelSearchArea.add(lblAuthor);
 		txtAuthor = new JTextField();
-		txtAuthor.setText("Author");
+		txtAuthor.setText("");
 		jPanelSearchArea.add(txtAuthor);
 		txtAuthor.setColumns(10);
 		
@@ -195,7 +197,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		txtResultList.setWrapStyleWord(true);
 		txtResultList.setLineWrap(true);
 //		txtResultList.add(new JScrollBar());
-		txtResultList.setText("ResultShowsHere");
+		txtResultList.setText("");
 		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		contentPane.add(JScrollPane, BorderLayout.CENTER);
 		//txtKeyword.setColumns(10);
@@ -210,29 +212,46 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			txtResultList.setText("");		
 			}
 		else if(ae.getActionCommand() =="Search") {
-			String authorName = txtAuthor.getText();
-			String title = txtTitle.getText();
-			String keyWords = txtTitle.getText();
+			String authorName = txtAuthor.getText().trim();
+			String title = txtTitle.getText().trim();
+			String keyWords = txtKeyword.getText().trim();
 			
-			paperDb.connect("teku", "Test123");
-			ArrayList<String> paperBytitle = paperDb.searchPapersbyTitle(title);
-			ArrayList<String> paperByAuthor = paperDb.searchPapersbyTitle(authorName);
-			ArrayList<String> paperByKeyword = paperDb.searchPapersbyTitle(keyWords);
+			paperDb.connect();
+			ArrayList<String> searchPapersAll = null;
 			
+			if (title.equals("") && authorName.equals("")){
+				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
+			}
+			else if (title.equals("") && keyWords.equals("")){
+				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
+			}
+			else if (authorName.equals("") && keyWords.equals("")){
+				searchPapersAll = paperDb.searchPapersbyTitle(title);
+			}
+			else if (authorName.equals("") && keyWords.equals("") && title.equals("")){
+				 txtResultList.append("Please Narrow your search by some fields" + "\n");
+			}
+			else{
+			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
+			}
+//			txtResultList.setText("");
+//			for(int i = 0; i < paperBytitle.size(); i++) {
+//				  //System.out.println(paperBytitle.get(i)); 
+//				 // txtResultList.append(paperBytitle.get(i)  + "\n");
+//				}
+//			for(int i = 0; i < paperByAuthor.size(); i++) {
+//				  //System.out.println(paperByAuthor.get(i)); 
+//				  //txtResultList.append(paperByAuthor.get(i)  + "\n");
+//				}
+//			for(int i = 0; i < paperByKeyword.size(); i++) {
+//				  //System.out.println(paperByKeyword.get(i)); 
+//				  //txtResultList.append(paperByKeyword.get(i)  + "\n");
+//				}
 			txtResultList.setText("");
-			for(int i = 0; i < paperBytitle.size(); i++) {
-				  System.out.println(paperBytitle.get(i)); 
-				  txtResultList.append(paperBytitle.get(i)  + "\n");
+			for(int i = 0; i < searchPapersAll.size(); i++) {
+				  System.out.println(searchPapersAll.get(i)); 
+				  txtResultList.append(searchPapersAll.get(i)  + "\n");
 				}
-			for(int i = 0; i < paperByAuthor.size(); i++) {
-				  System.out.println(paperByAuthor.get(i)); 
-				  txtResultList.append(paperByAuthor.get(i)  + "\n");
-				}
-			for(int i = 0; i < paperByKeyword.size(); i++) {
-				  System.out.println(paperByKeyword.get(i)); 
-				  txtResultList.append(paperByKeyword.get(i)  + "\n");
-				}
-			
 			
 		
 		}

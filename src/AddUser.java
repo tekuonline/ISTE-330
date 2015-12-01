@@ -149,7 +149,7 @@ public void actionPerformed(ActionEvent e) {
 		else if(rdbtnStudent.isSelected()){
 			role = "student";
 		}
-		paperDb.connect("teku", "Test123");
+		paperDb.connect();
 		if(paperDb.createUser(txtFname.getText(), txtLname.getText(), txtUsername.getText(), txtEmail.getText(), role, txtPassword.getText())){
 		JOptionPane.showMessageDialog(null, "user " + txtUsername.getText() + " Created");
 		}

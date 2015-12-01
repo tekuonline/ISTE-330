@@ -19,7 +19,7 @@ public class TestMain {
 		//PublicSearch ps = new PublicSearch();
 
 
-		if (paperDb.connect("teku", "Test123") != null) {
+		if (paperDb.connect() != null) {
 			System.out.println("connected to SQLServer ");
 		}
 		
@@ -52,13 +52,13 @@ public class TestMain {
 
 		System.out
 				.println("************Searching Paper By title*****************");
-		if (paperDb.searchPapersbyTitle("th")) {
+		if (paperDb.searchPapersbyTitle("th") != null) {
 		} else
 			System.out.println("paper cant be found");
 
 		System.out
 				.println("**************Searching Paper By KeyWords************");
-		if (paperDb.searchPapersbyKeyWord("tek")) {
+		if (paperDb.searchPapersbyKeyWord("tek") != null) {
 		} else
 			System.out.println("paper cant be found");
 

@@ -82,7 +82,7 @@ public class Login extends JDialog implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("OK")){
-			paperDb.connect("teku", "Test123");
+			paperDb.connect();
 			boolean connected = paperDb.authenticateUser(txtUsername.getText(), txtPassword.getText());
 			if (!connected){
 				JOptionPane.showMessageDialog(this,

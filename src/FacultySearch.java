@@ -8,10 +8,12 @@
  */
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -35,12 +37,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.JCheckBox;
 
 public class FacultySearch extends JFrame implements MenuListener, ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private PaperDatabase paperDb = new PaperDatabase();
+	private Login login = new Login();
+	private JScrollPane JScrollPane;
+	
 	
 	// Menu bar attributes
 	private JMenuBar menuBar = new JMenuBar();
@@ -56,18 +64,18 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 	private JTextField txtKeyword;
 	private JTextField txtTitle;
 	private JTextField txtAuthor;
-   private JLabel lblKeyword = new JLabel("Keyword:");
-   private JLabel lblAuthor = new JLabel("Author:");
-   private JLabel lblTitle = new JLabel("Title:");	
+    private JLabel lblKeyword = new JLabel("Keyword:");
+    private JLabel lblAuthor = new JLabel("Author:");
+    private JLabel lblTitle = new JLabel("Title:");	
 	
 	// title panel attributes
 	private JPanel jPanelTitle = new JPanel();
 	private JLabel lblWelcome = new JLabel("Welcome to Paper Database!");
-	private JLabel lblHello = new JLabel("Hello! Professor Floeser");
+	private JLabel lblHello = new JLabel("Hello! " + "Faculty");
 	
 	// Search result area attributes
 	private JPanel jPanelSearchArea = new JPanel();
-   private JTextArea txtResultList = new JTextArea();
+    private JTextArea txtResultList = new JTextArea();
 	
 	// button panel attributes
    private JCheckBox chckbxLimit = new JCheckBox("Limit to my articles only");
@@ -83,9 +91,8 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 	public FacultySearch() {
 		setTitle("Faculty/Student Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 635, 355);
-
-
+		setBounds(100, 100, 593, 355);
+		setSize(900,500);
 		
 		/**
 		 *  Menu bar content
@@ -120,6 +127,7 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 		jPanelTitle.setLayout(new GridLayout(2,1));		
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblWelcome.setForeground (Color.red);
 		jPanelTitle.add(lblWelcome);		
 		lblHello.setHorizontalAlignment(SwingConstants.TRAILING);
 		jPanelTitle.add(lblHello);
@@ -134,19 +142,17 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 		
 		jPanelSearchArea.add(lblKeyword);
 		txtKeyword = new JTextField();
-		txtKeyword.setText("Keyword");
+		
 		jPanelSearchArea.add(txtKeyword);
         txtKeyword.setColumns(10);	
 		
 		jPanelSearchArea.add(lblTitle);
 		txtTitle = new JTextField();
-		txtTitle.setText("Title");
 		jPanelSearchArea.add(txtTitle);
 		txtTitle.setColumns(10);
 		
 		jPanelSearchArea.add(lblAuthor);
 		txtAuthor = new JTextField();
-		txtAuthor.setText("Author");
 		jPanelSearchArea.add(txtAuthor);
 		txtAuthor.setColumns(10);
 		
@@ -173,10 +179,11 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 	
 		txtResultList.setWrapStyleWord(true);
 		txtResultList.setLineWrap(true);
-		txtResultList.add(new JScrollBar());
-		txtResultList.setText("ResultShowsHere");
-		contentPane.add(txtResultList, BorderLayout.CENTER);
-		txtKeyword.setColumns(10);
+		
+		txtResultList.setText("");
+		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		contentPane.add(JScrollPane, BorderLayout.CENTER);
+		
 	
 	}
 	
@@ -185,22 +192,66 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 		if(ae.getActionCommand().equals("Clear")) {
 			txtTitle.setText("");
 			txtAuthor.setText("");
-			txtKeyword.setText("");
+			txtKeyword.setText("");	
 		}
-		else if(ae.getActionCommand() =="Exit") {
-			dispose();
+		else if(ae.getActionCommand() =="Search") {
+
+			String authorName = txtAuthor.getText().trim();
+			String title = txtTitle.getText().trim();
+			String keyWords = txtKeyword.getText().trim();
+			
+			paperDb.connect();
+			ArrayList<String> searchPapersAll = null;
+			
+			if (title.equals("") && authorName.equals("")){
+				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
+			}
+			else if (title.equals("") && keyWords.equals("")){
+				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
+			}
+			else if (authorName.equals("") && keyWords.equals("")){
+				searchPapersAll = paperDb.searchPapersbyTitle(title);
+			}
+			else if (authorName.equals("") && keyWords.equals("") && title.equals("")){
+				 txtResultList.append("Please Narrow your search by some fields" + "\n");
+			}
+			else{
+			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
+			txtResultList.setText("");
+			}
+			
+			
+			for(int i = 0; i < searchPapersAll.size(); i++) {
+				  System.out.println(searchPapersAll.get(i)); 
+				  txtResultList.append(searchPapersAll.get(i)  + "\n");
+			}
+			
 		
+		
+			
 		}
-		else if(ae.getActionCommand() == "Login...") {
-			//frmResearchPaperDatabase.setVisible(false);
-			//LoginWindow lw = new LoginWindow(this);			
+		else if(ae.getActionCommand() == "Logout") {
+			dispose();
+					
 		}
+		
 		else if(ae.getActionCommand() == "Add") {
 			 EditWindow ed = new EditWindow();	
              ed.setVisible(true);
 			 setVisible(false);
 		}
+		else if(ae.getActionCommand() == "Update") {
+			 EditWindow ed = new EditWindow();	
+             ed.setVisible(true);
+			 setVisible(false);
+		}
+		else if(ae.getActionCommand() == "Delete") {
+			 EditWindow ed = new EditWindow();	
+             ed.setVisible(true);
+			 setVisible(false);
+		}
 	}
+	
 
 	@Override
 	public void menuCanceled(MenuEvent arg0) {
