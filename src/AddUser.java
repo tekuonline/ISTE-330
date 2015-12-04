@@ -13,7 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 
-
+/*
+ * Author Tek Nepal
+ */
 public class AddUser extends JFrame implements ActionListener {
 	private PaperDatabase paperDb = new PaperDatabase();
 
@@ -151,14 +153,27 @@ public void actionPerformed(ActionEvent e) {
 			role = "student";
 		}
 		paperDb.connect();
-		if(paperDb.createUser(txtFname.getText().trim(), txtLname.getText().trim(), txtUsername.getText().trim(),
-				txtEmail.getText().trim(), role, txtPassword.getText().trim())){
-		JOptionPane.showMessageDialog(null, "user " + txtUsername.getText().trim() + " Created");
+		if(txtFname.getText().trim().isEmpty() || txtLname.getText().trim().isEmpty() || 
+				txtUsername.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty() ||
+				txtPassword.getText().trim().isEmpty() || role.equals(null))
+		{
+			JOptionPane.showMessageDialog(null, "Please fill all forms out");
 		}
-		else JOptionPane.showMessageDialog(null, "Could Not Create User" + txtUsername.getText().trim());
-		
+	else{
+			if(paperDb.createUser(txtFname.getText().trim(), txtLname.getText().trim(), txtUsername.getText().trim(),
+				txtEmail.getText().trim(), role, txtPassword.getText().trim()).equals("Created")){
+				JOptionPane.showMessageDialog(null, "user " + txtUsername.getText().trim() + " Created");
+				this.dispose();
+			}
+			else if(paperDb.createUser(txtFname.getText().trim(), txtLname.getText().trim(), txtUsername.getText().trim(),
+					txtEmail.getText().trim(), role, txtPassword.getText().trim()).equals("Duplicate")){
+					JOptionPane.showMessageDialog(null, "User " + txtUsername.getText().trim() + " Already Exists");}
+			
+			else{ JOptionPane.showMessageDialog(null, "Could Not Create User" + txtUsername.getText().trim());
+			}
 	}
-	
+	}
+
 	else if(e.getActionCommand() =="Cancel") {
 		this.dispose();
 	}

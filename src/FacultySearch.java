@@ -233,18 +233,18 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 		
 		else if(ae.getActionCommand() == "Add") {
 			 EditWindow ed = new EditWindow();	
-             ed.setVisible(true);
-			 setVisible(false);
+			 setVisible(true);
+			 ed.setVisible(true);
 		}
 		else if(ae.getActionCommand() == "Update") {
 			 EditWindow ed = new EditWindow();	
-             ed.setVisible(true);
-			 setVisible(false);
+			 setVisible(true);
+			 ed.setVisible(true);
 		}
 		else if(ae.getActionCommand() == "Delete") {
 			 EditWindow ed = new EditWindow();	
-             ed.setVisible(true);
-			 setVisible(false);
+			 setVisible(true);
+			 ed.setVisible(true);
 		}
 	}
 	

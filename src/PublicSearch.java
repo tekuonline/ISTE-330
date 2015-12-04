@@ -21,10 +21,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
@@ -56,6 +59,10 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
 	private JScrollPane JScrollPane;
+	private JList listResultBox = new JList();
+	private DefaultListModel listModel = new DefaultListModel();
+	
+	
  
 	
    //search control attributes
@@ -81,22 +88,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
    private JButton btnLogin = new JButton("Login");
    private final JSeparator separator = new JSeparator();
 
-   /**
-    * Main Method
-    */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PublicSearch frame = new PublicSearch();
-					frame.setVisible(true);
-					//frame.initialize();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	// Create the frame.
 	public PublicSearch() {
@@ -193,13 +185,22 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		jPanelbottomButton.add(btnLogin);
 		//txtTitle.addMouseListener(this);
 
-	
-		txtResultList.setWrapStyleWord(true);
-		txtResultList.setLineWrap(true);
-//		txtResultList.add(new JScrollBar());
-		txtResultList.setText("");
-		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		contentPane.add(JScrollPane, BorderLayout.CENTER);
+		  listResultBox.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+	      listResultBox.setVisibleRowCount(-1);
+	      String test = String.format("<html><b><u>T</u>wo</b><br>lines</html>");
+	      listModel.clear();
+	      listResultBox = new JList(listModel);
+		//  contentPane.add(listResultBox, BorderLayout.CENTER);
+
+
+		
+		
+//		txtResultList.setWrapStyleWord(true);
+//		txtResultList.setLineWrap(true);
+////		txtResultList.add(new JScrollBar());
+//		txtResultList.setText("");
+		JScrollPane = new JScrollPane(listResultBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    	contentPane.add(JScrollPane, BorderLayout.CENTER);
 		//txtKeyword.setColumns(10);
 	
 	}
@@ -209,7 +210,8 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			txtKeyword.setText("");
 			txtTitle.setText("");
 			txtAuthor.setText("");
-			txtResultList.setText("");		
+			listResultBox.removeAll();
+			listModel.clear();		
 			}
 		else if(ae.getActionCommand() =="Search") {
 			String authorName = txtAuthor.getText().trim();
@@ -248,17 +250,18 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 //				  //txtResultList.append(paperByKeyword.get(i)  + "\n");
 //				}
 			txtResultList.setText("");
+			String test = "";
 			for(int i = 0; i < searchPapersAll.size(); i++) {
 				  System.out.println(searchPapersAll.get(i)); 
+				  test = test + "<br>"+ searchPapersAll.get(i)  + "</br>";
 				  txtResultList.append(searchPapersAll.get(i)  + "\n");
 				}
+			System.out.println(test + "this is the element");
+			listModel.addElement("<html>" +test + "</html>");
 			
 		
 		}
-//		else if(ae.getActionCommand() == "Clear") {
-//			Login lg = new Login();
-//			lg.setVisible(true);			
-//		}
+
 		else if(ae.getActionCommand() == "Login") {
 			 Login login = new Login();	
 			 this.setVisible(true);

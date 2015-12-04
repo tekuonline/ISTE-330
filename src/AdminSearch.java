@@ -40,6 +40,9 @@ import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 
+/*
+ * Author Tek Nepal
+ */
 public class AdminSearch extends JFrame implements MenuListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;

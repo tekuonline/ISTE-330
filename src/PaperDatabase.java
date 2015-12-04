@@ -1,6 +1,6 @@
 
 /**
- * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ * @authors TekNepal, Qiaoran Li, Chanvi Kotak
  *
  */
 
@@ -110,7 +110,7 @@ public class PaperDatabase implements Authenticate {
 	 * @return
 	 */
 
-	public boolean createUser(String fname, String lname, String username, String email, String role, String password) {
+	public String createUser(String fname, String lname, String username, String email, String role, String password) {
 		// paperdata.setConnection(connection);
 		SecureRandom random;
 		String insert;
@@ -132,10 +132,14 @@ public class PaperDatabase implements Authenticate {
 			pstmt.setString(7, this.md5(salt + password));
 			pstmt.executeUpdate();
 
-			return true;
+			return "Created";
 		} catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException ex) {
-			ex.printStackTrace();
-			return false;
+			//System.out.println(ex.getMessage());
+			if (ex.getMessage().contains("Duplicate entry")){
+				return "Duplicate";
+			}
+			//ex.printStackTrace();
+			return "Could Not Create";
 		}
 	}
 
