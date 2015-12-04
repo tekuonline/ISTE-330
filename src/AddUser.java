@@ -40,11 +40,11 @@ public AddUser() {
 		getContentPane().add(MainPanel, BorderLayout.CENTER);
 		MainPanel.setLayout(null);
 		
-		JLabel lblName = new JLabel("First Name");
+		JLabel lblName = new JLabel("First Name:");
 		lblName.setBounds(20, 68, 81, 16);
 		MainPanel.add(lblName);
 		
-		JLabel lblNewLabel = new JLabel("Last Name");
+		JLabel lblNewLabel = new JLabel("Last Name:");
 		lblNewLabel.setBounds(20, 96, 81, 16);
 		MainPanel.add(lblNewLabel);
 		
@@ -55,7 +55,7 @@ public AddUser() {
 		JLabel lblPaperDatabaseAdd = new JLabel("Paper Database add a user ");
 		panel.add(lblPaperDatabaseAdd);
 		
-		JLabel lblUsername = new JLabel("username");
+		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(20, 119, 81, 16);
 		MainPanel.add(lblUsername);
 		
@@ -63,7 +63,7 @@ public AddUser() {
 		lblEmail.setBounds(20, 147, 61, 16);
 		MainPanel.add(lblEmail);
 		
-		JLabel lblPassword = new JLabel("Password");
+		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(20, 175, 61, 16);
 		MainPanel.add(lblPassword);
 		
@@ -83,31 +83,26 @@ public AddUser() {
 		btnClear.addActionListener(this);
 		
 		txtFname = new JTextField();
-		txtFname.setText("fname");
 		txtFname.setBounds(159, 63, 130, 26);
 		MainPanel.add(txtFname);
 		txtFname.setColumns(10);
 		
 		txtLname = new JTextField();
-		txtLname.setText("lname");
 		txtLname.setBounds(159, 91, 130, 26);
 		MainPanel.add(txtLname);
 		txtLname.setColumns(10);
 		
 		txtUsername = new JTextField();
-		txtUsername.setText("username");
 		txtUsername.setBounds(159, 114, 130, 26);
 		MainPanel.add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		txtEmail = new JTextField();
-		txtEmail.setText("email");
 		txtEmail.setBounds(159, 142, 130, 26);
 		MainPanel.add(txtEmail);
 		txtEmail.setColumns(10);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setText("Password");
 		txtPassword.setBounds(159, 170, 130, 26);
 		MainPanel.add(txtPassword);
 		
