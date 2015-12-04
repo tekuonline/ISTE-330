@@ -6,7 +6,7 @@ import javax.swing.event.MenuListener;
 import Presentation.*;
 
 /**
- * @authors TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ * @authors TekNepal, Qiaoran Li, Chanvi Kotak
  *
  */
 public class TestMain {

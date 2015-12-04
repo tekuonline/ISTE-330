@@ -12,6 +12,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -53,6 +54,8 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 	private JMenu mnHelp = new JMenu("Help");
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
+	private JScrollPane JScrollPane;
+	
 
 	// search control attributes
 	private JTextField txtKeyword;
@@ -164,8 +167,10 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 		txtResultList.setWrapStyleWord(true);
 		txtResultList.setLineWrap(true);
 		txtResultList.add(new JScrollBar());
-		contentPane.add(txtResultList, BorderLayout.CENTER);
 		txtKeyword.setColumns(10);
+		txtResultList.setText("");
+		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		contentPane.add(JScrollPane, BorderLayout.CENTER);
 
 	}
 
@@ -176,6 +181,8 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnDelete = new JButton("Delete");
 	private JButton btnuser = new JButton("Add User");
+	
+	
 
 	// perform action when clear, search or login button is clicked
 	public void actionPerformed(ActionEvent ae) {
@@ -183,13 +190,17 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 			txtTitle.setText(" ");
 			txtAuthor.setText("");
 			txtKeyword.setText("");
+			txtResultList.setText("");
 		}
 
 		else if (ae.getActionCommand() == "Exit") {
 			System.exit(0);
-		} else if (ae.getActionCommand() == "Logout") {
+		} 
+		else if (ae.getActionCommand() == "Logout") {
+			this.dispose();
 
-		} else if (ae.getActionCommand() == "Search") {
+		} 
+		else if (ae.getActionCommand() == "Search") {
 			String authorName = txtAuthor.getText().trim();
 			String title = txtTitle.getText().trim();
 			String keyWords = txtKeyword.getText().trim();
@@ -228,18 +239,23 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 			}
 
 		} else if (ae.getActionCommand() == "Delete") {
-
+			
 		}
 		else if (ae.getActionCommand() == "Add Paper") {
 			EditWindow ed = new EditWindow();
 			setVisible(true);
 			ed.setVisible(true);
 
-		} else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
+		} 
+		else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
 			AddUser aduser = new AddUser();
 			this.setVisible(true);
 			aduser.setVisible(true);
-
+		}
+		else if (ae.getActionCommand().equalsIgnoreCase("Update")) {
+			EditWindow ed = new EditWindow();
+			setVisible(true);
+			ed.setVisible(true);
 		}
 	}
 

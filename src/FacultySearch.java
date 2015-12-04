@@ -193,6 +193,7 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 			txtTitle.setText("");
 			txtAuthor.setText("");
 			txtKeyword.setText("");	
+			txtResultList.setText("");
 		}
 		else if(ae.getActionCommand() =="Search") {
 
@@ -219,15 +220,10 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
 			txtResultList.setText("");
 			}
-			
-			
 			for(int i = 0; i < searchPapersAll.size(); i++) {
 				  System.out.println(searchPapersAll.get(i)); 
 				  txtResultList.append(searchPapersAll.get(i)  + "\n");
 			}
-			
-		
-		
 			
 		}
 		else if(ae.getActionCommand() == "Logout") {

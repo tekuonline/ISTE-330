@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -17,7 +18,7 @@ public class AddUser extends JFrame implements ActionListener {
 	private PaperDatabase paperDb = new PaperDatabase();
 
 	/**
-	 * 
+	 * constants
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField txtFname;
@@ -30,7 +31,9 @@ public class AddUser extends JFrame implements ActionListener {
 	private JRadioButton rdbtnAdmin;
 	private String role;
 
-
+/**
+ * Adds the user to the database 
+ */
 public AddUser() {
 	
 		setBounds(100, 100, 450, 300);
@@ -106,18 +109,21 @@ public AddUser() {
 		txtPassword.setBounds(159, 170, 130, 26);
 		MainPanel.add(txtPassword);
 		
+		ButtonGroup buttonGroup = new ButtonGroup();
 		rdbtnStudent = new JRadioButton("Student");
 		rdbtnStudent.setBounds(20, 203, 141, 23);
+		buttonGroup.add(rdbtnStudent);
 		MainPanel.add(rdbtnStudent);
 		
 		rdbtnFaculty = new JRadioButton("Faculty");
 		rdbtnFaculty.setBounds(148, 203, 141, 23);
+		buttonGroup.add(rdbtnFaculty);
 		MainPanel.add(rdbtnFaculty);
 		
 		rdbtnAdmin = new JRadioButton("Admin");
 		rdbtnAdmin.setBounds(297, 203, 141, 23);
+		buttonGroup.add(rdbtnAdmin);
 		MainPanel.add(rdbtnAdmin);
-		
 	}
 
 
@@ -145,10 +151,11 @@ public void actionPerformed(ActionEvent e) {
 			role = "student";
 		}
 		paperDb.connect();
-		if(paperDb.createUser(txtFname.getText(), txtLname.getText(), txtUsername.getText(), txtEmail.getText(), role, txtPassword.getText())){
-		JOptionPane.showMessageDialog(null, "user " + txtUsername.getText() + " Created");
+		if(paperDb.createUser(txtFname.getText().trim(), txtLname.getText().trim(), txtUsername.getText().trim(),
+				txtEmail.getText().trim(), role, txtPassword.getText().trim())){
+		JOptionPane.showMessageDialog(null, "user " + txtUsername.getText().trim() + " Created");
 		}
-		else JOptionPane.showMessageDialog(null, "Could Not Create User");
+		else JOptionPane.showMessageDialog(null, "Could Not Create User" + txtUsername.getText().trim());
 		
 	}
 	

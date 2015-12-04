@@ -34,7 +34,7 @@ public class PaperDatabase implements Authenticate {
 		if (paperdata.getConnection() == null) {
 			try {
 				Class.forName(DATABASE_DRIVER);
-				paperdata.setConnection(DriverManager.getConnection(DATABASE_URL, "teku", "Test123"));
+				paperdata.setConnection(DriverManager.getConnection(DATABASE_URL, user, pass));
 			} catch (SQLException e) {
 				System.out.println("Error  " + e.getMessage()); // delete this
 																// after all
