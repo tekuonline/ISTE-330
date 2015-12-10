@@ -454,14 +454,13 @@ public class PaperDatabase implements Authenticate {
 	public String insertPaper(int insertPaperid, String title, String abst, String citation) {
 		//if (r.equalsIgnoreCase("faculty") && (paperdata.isAuthenticated() == true)) {
 			String insertPaper = "INSERT INTO papers VALUES (?,?,?,?)";
-			try (PreparedStatement pstmt = prepare(insertPaper)) {
+			System.out.println("Paperid" + insertPaperid + "title "+title +"Abstract" + abst+ " Citation "+ citation);
+			try (PreparedStatement pstmt = paperdata.getConnection().prepareStatement(insertPaper)) {
 				pstmt.setInt(1, insertPaperid);
 				pstmt.setString(2, title);
 				pstmt.setString(3, abst);
 				pstmt.setString(4, citation);
-				
 				pstmt.executeUpdate();
-				
 				return "Paper Inserted";
 			} catch (SQLException e) {
 				return "Cannot add Duplicate Paper!";

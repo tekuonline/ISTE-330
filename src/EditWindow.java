@@ -62,9 +62,9 @@ public class EditWindow extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	private JTextField txtKeyword;
 	private JTextField txtTitle;
-	private JTextField txtKeyword_1;
-	//private JEditorPane editorPane;
-	private JTextArea editorPane = new JTextArea();
+	private JTextField txtcitation;
+	private JTextArea scrollPane;
+	//private JEditorPane editorPane
 	private PaperDatabase paperDb = new PaperDatabase();
 
 	/**
@@ -103,11 +103,11 @@ public class EditWindow extends JFrame implements ActionListener{
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnCancel = new JButton("Cancel");
-      btnCancel.addActionListener(this);
-      bottomPanel.add(btnCancel);
+		btnCancel.addActionListener(this);
+		bottomPanel.add(btnCancel);
 		
 		JButton btnSave = new JButton("Save");
-      btnSave.addActionListener(this);
+		btnSave.addActionListener(this);
 		bottomPanel.add(btnSave);
 		
 		
@@ -134,19 +134,14 @@ public class EditWindow extends JFrame implements ActionListener{
 		JLabel lblKeyword_1 = new JLabel("Citation");
 		topPanel.add(lblKeyword_1);
 		
-		txtKeyword_1 = new JTextField();
-		txtKeyword_1.setText("");
-		topPanel.add(txtKeyword_1);
-		txtKeyword_1.setColumns(10);
+		txtcitation = new JTextField();
+		txtcitation.setText("");
+		topPanel.add(txtcitation);
+		txtcitation.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JTextArea();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(200, 250));
-		
-		
-		editorPane = new JTextArea();
-		scrollPane.setViewportView(editorPane);
 		
 		
 	}
@@ -165,8 +160,9 @@ public class EditWindow extends JFrame implements ActionListener{
 			Random rand = new Random();
 			int  n = rand.nextInt(50) + 1;
 			String title = txtTitle.getText().trim();
-			String citation = txtTitle.getText().trim();
-			String abst = editorPane.getText().trim();
+			String citation = txtcitation.getText().trim();
+			String abst = scrollPane.getText().trim();
+			System.out.println(title +" " + citation + " "+ abst);
 			String PaperStat = paperDb.insertPaper(n, title, abst, citation);
 			System.out.println(PaperStat);
 			System.out.println(r);

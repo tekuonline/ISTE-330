@@ -39,6 +39,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
@@ -196,7 +197,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		jPanelbottomButton.add(btnLogin);
 		//txtTitle.addMouseListener(this);
 
-		  model = new DefaultTableModel(null, new String [] {"Select", "Paper"}) {
+		  model = new DefaultTableModel(null, new String [] {"Select", "Title", "Abstract", "Citation" }) {
               /**
 			 * 
 			 */
@@ -205,6 +206,9 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			public Class getColumnClass(int c) {
                 switch (c) {
                   case 0: return Boolean.class;
+                  case 1: return String.class;
+                  case 2: return String.class;
+                  case 3: return String.class;
                   default: return String.class;
                 }   
               }};
@@ -212,7 +216,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 					tableResult = new JTable(model);
 					TableColumnModel colMdl = tableResult.getColumnModel();
 					// put data into the String
-					colMdl.getColumn(0).setPreferredWidth(20);
+					colMdl.getColumn(0).setPreferredWidth(5);
 					//colMdl.getColumn(1).setPreferredWidth(60);
 					tableResult.setRowHeight(40);
 					//tableResult.setAutoResizeMode(ABORT);
@@ -229,7 +233,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		
 //		txtResultList.setWrapStyleWord(true);
 //		txtResultList.setLineWrap(true);
-////		txtResultList.add(new JScrollBar());
+////	txtResultList.add(new JScrollBar());
 //		txtResultList.setText("");
 		//JScrollPane = new JScrollPane(listResultBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     //	contentPane.add(JScrollPane, BorderLayout.CENTER);
@@ -247,12 +251,19 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		}
 		
 		else if(ae.getActionCommand() =="Search") {
+			clearTable();
 			String authorName = txtAuthor.getText().trim();
 			String title = txtTitle.getText().trim();
 			String keyWords = txtKeyword.getText().trim();
 			
 			paperDb.connect();
 			ArrayList<String> searchPapersAll = null;
+			if (authorName.equals("") && keyWords.equals("") && title.equals("")){
+				 searchPapersAll.removeAll(searchPapersAll);
+				 searchPapersAll.add("Please Narrow your search by some fields");
+				 searchPapersAll.add("");
+				 searchPapersAll.add("");
+			}
 			
 			if (title.equals("") && authorName.equals("")){
 				searchPapersAll = null;
@@ -265,10 +276,6 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			else if (authorName.equals("") && keyWords.equals("")){
 				searchPapersAll = null;
 				searchPapersAll = paperDb.searchPapersbyTitle(title);
-			}
-			else if (authorName.equals("") && keyWords.equals("") && title.equals("")){
-				 searchPapersAll = null;
-				 txtResultList.append("Please Narrow your search by some fields" + "\n");
 			}
 			else {
 			searchPapersAll = null;
@@ -288,11 +295,12 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 //				  //txtResultList.append(paperByKeyword.get(i)  + "\n");
 //				}
 			txtResultList.setText("");
-			String test = "";
-			model.addRow(new Object[]{false, null});
+			
 			for(int i = 0; i < searchPapersAll.size(); i++) {
-				  System.out.println(searchPapersAll.get(i)); 
-				  model.addRow(new Object[]{false, searchPapersAll.get(i)}); 
+				 // System.out.println(searchPapersAll.get(i)); 
+				  Object[] paperObj= new Object[]{false, searchPapersAll.get(0), searchPapersAll.get(1), searchPapersAll.get(2)};
+				  System.out.println(paperObj); 
+				  model.addRow(paperObj);
 				}	
 		}
 		else if(ae.getActionCommand() == "Login") {
