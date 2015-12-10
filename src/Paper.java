@@ -26,7 +26,14 @@ public class Paper
                 this.myPaperDB = pDatabase;
         }
         
-       
+       /**
+        * 
+        * @param id
+        * @param title
+        * @param abstrac
+        * @param citation
+        * @param pDatabase
+        */
     public Paper(String id, String title, String abstrac, String citation, PaperDatabase pDatabase)
         {
                 

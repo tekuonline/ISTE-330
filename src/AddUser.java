@@ -69,7 +69,7 @@ public AddUser() {
 		MainPanel.add(lblEmail);
 		
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(20, 175, 61, 16);
+		lblPassword.setBounds(20, 175, 81, 16);
 		MainPanel.add(lblPassword);
 		
 		JButton btnSave = new JButton("Save");

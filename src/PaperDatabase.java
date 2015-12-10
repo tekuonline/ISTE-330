@@ -297,7 +297,7 @@ public class PaperDatabase implements Authenticate {
 				// System.out.println("Title: " + title);
 				// System.out.println("Abstract: " + ab);
 				// System.out.println("Citation: " + citation);
-				paperByTitle.add(id);
+				//paperByTitle.add(id);
 				paperByTitle.add(title);
 				paperByTitle.add(ab);
 				paperByTitle.add(citation);
@@ -332,7 +332,7 @@ public class PaperDatabase implements Authenticate {
 //				System.out.println("Abstract: " + ab);
 //				System.out.println("Citation: " + citation);
 
-				paperByAuthor.add(id);
+				//paperByAuthor.add(id);
 				paperByAuthor.add(title);
 				paperByAuthor.add(ab);
 				paperByAuthor.add(citation);
@@ -368,7 +368,7 @@ public class PaperDatabase implements Authenticate {
 				System.out.println("Title: " + title);
 				System.out.println("Abstract: " + ab);
 				System.out.println("Citation: " + citation);
-				paperByKeyWords.add(id);
+				//paperByKeyWords.add(id);
 				paperByKeyWords.add(title);
 				paperByKeyWords.add(ab);
 				paperByKeyWords.add(citation);
@@ -407,7 +407,7 @@ public class PaperDatabase implements Authenticate {
 				System.out.println("Title: " + title);
 				System.out.println("Abstract: " + ab);
 				System.out.println("Citation: " + citation);
-				searchPapersAll.add(paperId);
+				//searchPapersAll.add(paperId);
 				searchPapersAll.add(title);
 				searchPapersAll.add(ab);
 				searchPapersAll.add(citation);
@@ -452,21 +452,21 @@ public class PaperDatabase implements Authenticate {
 	 * @return
 	 */
 	public String insertPaper(int insertPaperid, String title, String abst, String citation) {
-		if (role.equalsIgnoreCase("faculty") && (paperdata.isAuthenticated() == true)) {
+		//if (r.equalsIgnoreCase("faculty") && (paperdata.isAuthenticated() == true)) {
 			String insertPaper = "INSERT INTO papers VALUES (?,?,?,?)";
-
 			try (PreparedStatement pstmt = prepare(insertPaper)) {
 				pstmt.setInt(1, insertPaperid);
 				pstmt.setString(2, title);
 				pstmt.setString(3, abst);
 				pstmt.setString(4, citation);
-				int rs = pstmt.executeUpdate();
-				return "Paper " + insertPaperid + " Inserted";
+				
+				pstmt.executeUpdate();
+				
+				return "Paper Inserted";
 			} catch (SQLException e) {
 				return "Cannot add Duplicate Paper!";
 			}
-		}
-		return "you are not authorized to add papers";
+		//return "you are not authorized to add papers";
 	}
 
 	/**
@@ -524,12 +524,8 @@ public class PaperDatabase implements Authenticate {
 		return "Could not find your papers";
 	}
 
-	public static String getRole() {
+	public String getRole() {
 		return role;
-	}
-
-	public static void setRole(String role) {
-		PaperDatabase.role = role;
 	}
 
 	public Connection getConnection() {

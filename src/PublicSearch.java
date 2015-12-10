@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
+
 import Presentation.*;
 
 public class PublicSearch extends JFrame implements MenuListener, ActionListener{
@@ -48,8 +52,11 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	private JPanel contentPane;
 	
 	PaperDatabase paperDb = new PaperDatabase();
+	Person p = new Person();
+	
 	
 	// Menu bar attributes
+	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu mnFile = new JMenu("File");
 	private JMenuItem mntmLogin = new JMenuItem("Login");
@@ -61,6 +68,8 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	private JScrollPane JScrollPane;
 	private JList listResultBox = new JList();
 	private DefaultListModel listModel = new DefaultListModel();
+	 private JTable tableResult =new JTable();
+	   private DefaultTableModel model = new DefaultTableModel(); 
 	
 	
  
@@ -97,6 +106,8 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 593, 355);
 		setSize(900,500);
+		String name = p.getId();
+		System.out.println("name: "+ name);
 	//}
 	
 	//public void initialize(){
@@ -177,7 +188,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
         */      
 		contentPane.add(jPanelbottomButton, BorderLayout.SOUTH);
 		
-      btnSearch.addActionListener(this);    	
+		btnSearch.addActionListener(this);    	
     	jPanelbottomButton.add(btnSearch);
 		btnClear.addActionListener(this);		
 		jPanelbottomButton.add(btnClear);
@@ -185,11 +196,32 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 		jPanelbottomButton.add(btnLogin);
 		//txtTitle.addMouseListener(this);
 
-		  listResultBox.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-	      listResultBox.setVisibleRowCount(-1);
-	      String test = String.format("<html><b><u>T</u>wo</b><br>lines</html>");
-	      listModel.clear();
-	      listResultBox = new JList(listModel);
+		  model = new DefaultTableModel(null, new String [] {"Select", "Paper"}) {
+              /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public Class getColumnClass(int c) {
+                switch (c) {
+                  case 0: return Boolean.class;
+                  default: return String.class;
+                }   
+              }};
+              		
+					tableResult = new JTable(model);
+					TableColumnModel colMdl = tableResult.getColumnModel();
+					// put data into the String
+					colMdl.getColumn(0).setPreferredWidth(20);
+					//colMdl.getColumn(1).setPreferredWidth(60);
+					tableResult.setRowHeight(40);
+					//tableResult.setAutoResizeMode(ABORT);
+					JScrollPane scrollPane = new JScrollPane(tableResult);
+					tableResult.setFillsViewportHeight(true);
+					tableResult.getTableHeader().setReorderingAllowed(false);
+					contentPane.add(scrollPane, BorderLayout.CENTER);
+					
+					
 		//  contentPane.add(listResultBox, BorderLayout.CENTER);
 
 
@@ -199,8 +231,8 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 //		txtResultList.setLineWrap(true);
 ////		txtResultList.add(new JScrollBar());
 //		txtResultList.setText("");
-		JScrollPane = new JScrollPane(listResultBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    	contentPane.add(JScrollPane, BorderLayout.CENTER);
+		//JScrollPane = new JScrollPane(listResultBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    //	contentPane.add(JScrollPane, BorderLayout.CENTER);
 		//txtKeyword.setColumns(10);
 	
 	}
@@ -211,8 +243,9 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			txtTitle.setText("");
 			txtAuthor.setText("");
 			listResultBox.removeAll();
-			listModel.clear();		
-			}
+			clearTable();
+		}
+		
 		else if(ae.getActionCommand() =="Search") {
 			String authorName = txtAuthor.getText().trim();
 			String title = txtTitle.getText().trim();
@@ -222,18 +255,23 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			ArrayList<String> searchPapersAll = null;
 			
 			if (title.equals("") && authorName.equals("")){
+				searchPapersAll = null;
 				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
 			}
 			else if (title.equals("") && keyWords.equals("")){
+				searchPapersAll = null;
 				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
 			}
 			else if (authorName.equals("") && keyWords.equals("")){
+				searchPapersAll = null;
 				searchPapersAll = paperDb.searchPapersbyTitle(title);
 			}
 			else if (authorName.equals("") && keyWords.equals("") && title.equals("")){
+				 searchPapersAll = null;
 				 txtResultList.append("Please Narrow your search by some fields" + "\n");
 			}
-			else{
+			else {
+			searchPapersAll = null;
 			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
 			}
 //			txtResultList.setText("");
@@ -251,17 +289,12 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 //				}
 			txtResultList.setText("");
 			String test = "";
+			model.addRow(new Object[]{false, null});
 			for(int i = 0; i < searchPapersAll.size(); i++) {
 				  System.out.println(searchPapersAll.get(i)); 
-				  test = test + "<br>"+ searchPapersAll.get(i)  + "</br>";
-				  txtResultList.append(searchPapersAll.get(i)  + "\n");
-				}
-			System.out.println(test + "this is the element");
-			listModel.addElement("<html>" +test + "</html>");
-			
-		
+				  model.addRow(new Object[]{false, searchPapersAll.get(i)}); 
+				}	
 		}
-
 		else if(ae.getActionCommand() == "Login") {
 			 Login login = new Login();	
 			 this.setVisible(true);
@@ -292,5 +325,12 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	public void mouseClicked(MouseEvent e) {
 		txtTitle.setText("");
 	}
+	private void clearTable(){
+		int rows = model.getRowCount(); 
+		for(int i = rows - 1; i >=0; i--)
+		{
+		   model.removeRow(i); 
+		}
+		}
 
 }

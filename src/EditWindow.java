@@ -1,4 +1,4 @@
-package Presentation;
+
 
 /**
  * ISTE 330 Part 3
@@ -53,6 +53,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
+
 import javax.swing.JCheckBox;
 
 public class EditWindow extends JFrame implements ActionListener{
@@ -61,7 +63,9 @@ public class EditWindow extends JFrame implements ActionListener{
 	private JTextField txtKeyword;
 	private JTextField txtTitle;
 	private JTextField txtKeyword_1;
-	//private PaperDatabase paperDb = new PaperDatabase();
+	//private JEditorPane editorPane;
+	private JTextArea editorPane = new JTextArea();
+	private PaperDatabase paperDb = new PaperDatabase();
 
 	/**
 	 * Launch the application.
@@ -115,7 +119,7 @@ public class EditWindow extends JFrame implements ActionListener{
 		topPanel.add(lblKeyword);
 		
 		txtKeyword = new JTextField();
-		txtKeyword.setText("Enter/edit your keyword here.");
+		txtKeyword.setText("");
 		topPanel.add(txtKeyword);
 		txtKeyword.setColumns(10);
 		
@@ -124,14 +128,14 @@ public class EditWindow extends JFrame implements ActionListener{
 		
 		txtTitle = new JTextField();
 		topPanel.add(txtTitle);
-		txtTitle.setText("Enter/edit the title here.");
+		txtTitle.setText("");
 		txtTitle.setColumns(10);
 		
-		JLabel lblKeyword_1 = new JLabel("Keyword");
+		JLabel lblKeyword_1 = new JLabel("Citation");
 		topPanel.add(lblKeyword_1);
 		
 		txtKeyword_1 = new JTextField();
-		txtKeyword_1.setText("Enter/edit the keyword here.");
+		txtKeyword_1.setText("");
 		topPanel.add(txtKeyword_1);
 		txtKeyword_1.setColumns(10);
 		
@@ -140,8 +144,11 @@ public class EditWindow extends JFrame implements ActionListener{
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(200, 250));
 		
-		JEditorPane editorPane = new JEditorPane();
+		
+		editorPane = new JTextArea();
 		scrollPane.setViewportView(editorPane);
+		
+		
 	}
 
 	//public EditWindow(FacultySearch facultySearch) {
@@ -151,10 +158,29 @@ public class EditWindow extends JFrame implements ActionListener{
 	//perform action when clear, search or login button is clicked
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("Cancel")) {
-			dispose();
+		dispose();
 		}
 		else if(ae.getActionCommand() =="Save") {
-			System.exit(0);
+			String r = paperDb.getRole();
+			Random rand = new Random();
+			int  n = rand.nextInt(50) + 1;
+			String title = txtTitle.getText().trim();
+			String citation = txtTitle.getText().trim();
+			String abst = editorPane.getText().trim();
+			String PaperStat = paperDb.insertPaper(n, title, abst, citation);
+			System.out.println(PaperStat);
+			System.out.println(r);
+//			if(PaperStat.equalsIgnoreCase("Cannot add Duplicate Paper!"))	{
+//				System.out.println("Cannot add duplicate paper!");
+//			}
+//			else if (PaperStat.equals("Paper Inserted")){
+//				System.out.println("Paper Inserted");
+//				
+//			}
+//			else if (PaperStat.equals("you are not authorized to add papers")){
+//				
+//				System.out.println("you are not authorized to add papers");
+//			}
 		}
 	}
 
