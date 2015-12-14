@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.event.MenuListener;
 
-import Presentation.*;
+//import Presentation.*;
 
 /**
  * @authors TekNepal, Qiaoran Li, Chanvi Kotak
@@ -12,11 +12,15 @@ import Presentation.*;
  */
 public class RunProgram {
 
+	private static PaperDatabase paperDb = new PaperDatabase();
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PublicSearch frame = new PublicSearch();
+					
+					paperDb.connect();
+					AdminSearch frame = new AdminSearch();
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -84,7 +88,7 @@ public class RunProgram {
 //		System.out.println(updateStatus);
 //
 //		System.out.println("**************Inserting the paper************");
-//		String insertStatus = paperDb.insertPaper(10, "test", "test", "test");
+//		String insertStatus = paperDb.insertPaper(10, "test", "test", "test"); this worked 
 //		System.out.println(insertStatus);
 //
 //		System.out.println("**************Inserting Keywords************");

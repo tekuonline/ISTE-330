@@ -1,5 +1,5 @@
 /**
- * @author TekNepal,Tim O'Rourke, Qiaoran Li, Chanvi Kotak
+ * @author TekNepal, Qiaoran Li, Chanvi Kotak
  *
  */
 public interface Authenticate {

@@ -8,39 +8,41 @@
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
-import javax.swing.JCheckBox;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /*
  * Author Tek Nepal
  */
-public class AdminSearch extends JFrame implements MenuListener, ActionListener {
+public class AdminSearch extends JFrame implements MenuListener, ActionListener, TableModelListener {
+
+	public int selectedPaperID;
+	public ArrayList<String> selectedList = new ArrayList<String>();
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -55,7 +57,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
 	private JScrollPane JScrollPane;
-	
+	Login login;
 
 	// search control attributes
 	private JTextField txtKeyword;
@@ -64,16 +66,26 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 	private JLabel lblKeyword = new JLabel("Keyword:");
 	private JLabel lblAuthor = new JLabel("Author:");
 	private JLabel lblTitle = new JLabel("Title:");
+	private JLabel lblMessage = new JLabel();
 
 	// title panel attributes
 	private JPanel jPanelTitle = new JPanel();
 	private JLabel lblWelcome = new JLabel("Welcome to Paper Database!");
-	private JLabel lblHello = new JLabel("Hello! Admin");
+	private JLabel lblHello = new JLabel("Hello! User");
 
 	// Search result area attributes
 	private JPanel jPanelSearchArea = new JPanel();
-	private JTextArea txtResultList = new JTextArea();
 	private JPanel jPanelbottomButton = new JPanel();
+	private JTable tableResult = new JTable();
+	private DefaultTableModel model = new DefaultTableModel();
+	private JButton btnSearch = new JButton("Search");
+	private JButton btnClear = new JButton("Clear");
+	private JButton btnLogout = new JButton("Logout");
+	private JButton btnAdd = new JButton("Add Paper");
+	private JButton btnUpdate = new JButton("Update");
+	private JButton btnDelete = new JButton("Delete");
+	private JButton btnuser = new JButton("Add User");
+	private JButton btnlogin = new JButton("Login");
 
 	// Create the frame.
 	public AdminSearch() {
@@ -99,7 +111,9 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 		mntmExit.addActionListener(this);
 		menuBar.add(mnHelp);
 		mnHelp.add(mntmAbout);
+		mntmAbout.addActionListener(this);
 		mnHelp.add(mntmHowToUse);
+		mntmHowToUse.addActionListener(this);
 
 		/**
 		 * Main panel with in the frame
@@ -127,7 +141,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 		 */
 
 		contentPane.add(jPanelSearchArea, BorderLayout.WEST);
-		jPanelSearchArea.setLayout(new GridLayout(3, 2));
+		jPanelSearchArea.setLayout(new GridLayout(4, 2));
 
 		jPanelSearchArea.add(lblKeyword);
 		txtKeyword = new JTextField();
@@ -143,6 +157,8 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 		txtAuthor = new JTextField();
 		jPanelSearchArea.add(txtAuthor);
 		txtAuthor.setColumns(10);
+		lblMessage.setForeground(Color.RED);
+		jPanelSearchArea.add(lblMessage);
 
 		/**
 		 * Bottom button panel
@@ -163,100 +179,218 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener 
 		jPanelbottomButton.add(btnLogout);
 		btnuser.addActionListener(this);
 		jPanelbottomButton.add(btnuser);
+		jPanelbottomButton.add(btnlogin);
+		btnlogin.addActionListener(this);
+		jPanelbottomButton.add(btnlogin);
 
-		txtResultList.setWrapStyleWord(true);
-		txtResultList.setLineWrap(true);
-		txtResultList.add(new JScrollBar());
-		txtKeyword.setColumns(10);
-		txtResultList.setText("");
-		JScrollPane = new JScrollPane(txtResultList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		contentPane.add(JScrollPane, BorderLayout.CENTER);
+		model = new DefaultTableModel(null, new String[] { "Select", "ID", "Title", "Abstract", "Citation" }) {
+			/**
+			* 
+			*/
+			private static final long serialVersionUID = 1L;
+
+			public Class getColumnClass(int c) {
+				switch (c) {
+				case 0:
+					return Boolean.class;
+				case 1:
+					return String.class;
+				case 2:
+					return String.class;
+				case 3:
+					return String.class;
+				default:
+					return String.class;
+				}
+			}
+		};
+
+		tableResult = new JTable(model);
+		tableResult.getColumn("ID").setPreferredWidth(0);
+		tableResult.getColumn("ID").setMinWidth(0);
+		tableResult.getColumn("ID").setWidth(0);
+		tableResult.getColumn("ID").setMaxWidth(0);
+		TableColumnModel colMdl = tableResult.getColumnModel();
+		// put data into the String
+		colMdl.getColumn(0).setPreferredWidth(5);
+		// colMdl.getColumn(1).setPreferredWidth(60);
+		tableResult.setRowHeight(40);
+		// tableResult.setAutoResizeMode(ABORT);
+		JScrollPane scrollPane = new JScrollPane(tableResult);
+		tableResult.setFillsViewportHeight(true);
+		tableResult.getTableHeader().setReorderingAllowed(false);
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		tableResult.getModel().addTableModelListener(this);
 
 	}
-
-	private JButton btnSearch = new JButton("Search");
-	private JButton btnClear = new JButton("Clear");
-	private JButton btnLogout = new JButton("Logout");
-	private JButton btnAdd = new JButton("Add Paper");
-	private JButton btnUpdate = new JButton("Update");
-	private JButton btnDelete = new JButton("Delete");
-	private JButton btnuser = new JButton("Add User");
-	
-	
 
 	// perform action when clear, search or login button is clicked
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand() == ("Reset") || ae.getActionCommand() == "Clear") {
-			txtTitle.setText(" ");
-			txtAuthor.setText("");
 			txtKeyword.setText("");
-			txtResultList.setText("");
+			txtTitle.setText("");
+			txtAuthor.setText("");
+			clearTable();
 		}
 
-		else if (ae.getActionCommand() == "Exit") {
-			System.exit(0);
-		} 
-		else if (ae.getActionCommand() == "Logout") {
-			this.dispose();
-
-		} 
 		else if (ae.getActionCommand() == "Search") {
+			clearTable();
 			String authorName = txtAuthor.getText().trim();
 			String title = txtTitle.getText().trim();
 			String keyWords = txtKeyword.getText().trim();
 
 			paperDb.connect();
-			ArrayList<String> searchPapersAll = null;
+			ArrayList<String> column = new ArrayList<String>();
+			ArrayList<String> values = new ArrayList<String>();
 
-			if (title.equals("") && authorName.equals("")) {
-				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
-			} else if (title.equals("") && keyWords.equals("")) {
-				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
-			} else if (authorName.equals("") && keyWords.equals("")) {
-				searchPapersAll = paperDb.searchPapersbyTitle(title);
-			} else if (authorName.equals("") && keyWords.equals("") && title.equals("")) {
-				txtResultList.append("Please Narrow your search by some fields" + "\n");
+			if (!authorName.isEmpty()) {
+				column.add("person.fname");
+				values.add(txtAuthor.getText().trim());
+				System.out.println(txtAuthor.getText().trim());
+			}
+			if (!title.isEmpty()) {
+				column.add("title");
+				values.add(txtTitle.getText().trim());
+				System.out.println(txtTitle.getText().trim());
+			}
+			if (!keyWords.isEmpty()) {
+				column.add("keyword");
+				values.add(txtKeyword.getText().trim());
+				System.out.println(txtKeyword.getText().trim());
+			}
+			paperDb.bigList.clear();
+			paperDb.bigList.clear();
+
+			paperDb.fetch(column, values);
+			if (paperDb.bigList.size() > 0) {
+				for (int i = 0; i < paperDb.bigList.size(); i++) {
+					ArrayList<String> small = paperDb.bigList.get(i);
+					model.addRow(new Object[] { false, small.get(0), small.get(1), small.get(2), small.get(3) });
+				}
 			} else {
-				searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
-			}
-			// txtResultList.setText("");
-			// for(int i = 0; i < paperBytitle.size(); i++) {
-			// //System.out.println(paperBytitle.get(i));
-			// // txtResultList.append(paperBytitle.get(i) + "\n");
-			// }
-			// for(int i = 0; i < paperByAuthor.size(); i++) {
-			// //System.out.println(paperByAuthor.get(i));
-			// //txtResultList.append(paperByAuthor.get(i) + "\n");
-			// }
-			// for(int i = 0; i < paperByKeyword.size(); i++) {
-			// //System.out.println(paperByKeyword.get(i));
-			// //txtResultList.append(paperByKeyword.get(i) + "\n");
-			// }
-			txtResultList.setText("");
-			for (int i = 0; i < searchPapersAll.size(); i++) {
-				System.out.println(searchPapersAll.get(i));
-				txtResultList.append(searchPapersAll.get(i) + "\n");
+
+				lblMessage.setText("No record found.");
 			}
 
+		} else if (ae.getActionCommand() == "Login") {
+			login = new Login();
+
+			this.setVisible(true);
+			login.setVisible(true);
+		} else if (ae.getActionCommand().equalsIgnoreCase("Exit")) {
+			System.exit(0);
+		} else if (ae.getActionCommand().equalsIgnoreCase("How to use -->")) {
+			try {
+				Runtime.getRuntime().exec("hh.exe ..\\help\\Paperdatabase.chm");
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				System.out.println(
+						"CHM file only works on Windows Machines!\n" + "Please use the CHM viewer Mac to see the help file");
+			}
+		} else if (ae.getActionCommand().equalsIgnoreCase("About")) {
+
+			JOptionPane.showMessageDialog(null, "Paper Search Database " + "By Group 11\n " + "\u00a9 2015 \n"
+					+ "Chanvi Kotak\n" + "Qiaoran Li\n" + "Tek Nepal\n");
 		} else if (ae.getActionCommand() == "Delete") {
-			
-		}
-		else if (ae.getActionCommand() == "Add Paper") {
-			EditWindow ed = new EditWindow();
+			if (paperDb.deletePapers(selectedPaperID)) {
+				JOptionPane.showMessageDialog(null, "Deleted selected paper ");
+				clearTable();
+			}
+		} else if (ae.getActionCommand() == "Add Paper") {
+			AddWindow ed = new AddWindow();
 			setVisible(true);
 			ed.setVisible(true);
 
-		} 
-		else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
+		} else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
 			AddUser aduser = new AddUser();
 			this.setVisible(true);
 			aduser.setVisible(true);
-		}
-		else if (ae.getActionCommand().equalsIgnoreCase("Update")) {
+		} else if (ae.getActionCommand().equalsIgnoreCase("Update")) {
+			paperDb.smallList.clear();
+			paperDb.bigList.clear();
 			EditWindow ed = new EditWindow();
+			ArrayList<String> value = new ArrayList<String>();
+			ed.txtpaperId.setText(selectedList.get(0));
+			ed.txtTitle.setText(selectedList.get(1));
+			ed.txtcitation.setText(selectedList.get(3));
+			ed.txaAbstract.setText(selectedList.get(2));
+			ed.txaAbstract.setWrapStyleWord(true);
+			ed.txaAbstract.setLineWrap(true);
 			setVisible(true);
 			ed.setVisible(true);
 		}
+	}
+
+	// event listener for table
+	// active when table detects changes in cells
+	public void tableChanged(TableModelEvent e) {
+		int row = e.getFirstRow();
+		int column = e.getColumn();
+		TableModel model = (TableModel) e.getSource();
+		if (column > -1) {
+			Object data = model.getValueAt(row, column);
+			selectedList.clear();
+			if ((boolean) data == true) {
+				selectedPaperID = Integer.parseInt(model.getValueAt(row, column + 1).toString());
+				selectedList.add(model.getValueAt(row, column + 1).toString());
+				selectedList.add(model.getValueAt(row, column + 2).toString());
+				selectedList.add(model.getValueAt(row, column + 3).toString());
+				selectedList.add(model.getValueAt(row, column + 4).toString());
+				for (int i = 0; i < selectedList.size(); i++) {
+					System.out.println(selectedList.get(i));
+
+				}
+			} else {
+				selectedPaperID = -1;
+			}
+		}
+	}
+
+	private void clearTable() {
+		int rows = model.getRowCount();
+		lblMessage.setText("");
+		for (int i = rows - 1; i >= 0; i--) {
+			model.removeRow(i);
+		}
+	}
+
+	public void isAdmin() {
+		btnUpdate.setEnabled(true);
+
+		btnDelete.setEnabled(true);
+
+		btnLogout.setEnabled(true);
+
+		btnuser.setEnabled(true);
+
+		btnAdd.setEnabled(true);
+
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+
+	public void isFaculty() {
+		btnUpdate.setEnabled(true);
+
+		btnDelete.setEnabled(true);
+
+		btnLogout.setEnabled(true);
+
+		btnuser.setEnabled(false);
+
+		btnAdd.setEnabled(true);
+	}
+
+	private void isPublic() {
+		btnUpdate.setEnabled(false);
+
+		btnDelete.setEnabled(false);
+
+		btnLogout.setEnabled(false);
+
+		btnuser.setEnabled(false);
+
+		btnAdd.setEnabled(false);
 	}
 
 	@Override

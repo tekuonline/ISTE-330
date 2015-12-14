@@ -1,17 +1,17 @@
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /*
  * Author Tek Nepal
@@ -39,8 +39,6 @@ public class AddUser extends JFrame implements ActionListener {
 public AddUser() {
 	
 		setBounds(100, 100, 450, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		JPanel MainPanel = new JPanel();
 		getContentPane().add(MainPanel, BorderLayout.CENTER);
 		MainPanel.setLayout(null);
@@ -58,6 +56,7 @@ public AddUser() {
 		MainPanel.add(panel);
 		
 		JLabel lblPaperDatabaseAdd = new JLabel("Paper Database add a user ");
+		lblPaperDatabaseAdd.setForeground(Color.red);
 		panel.add(lblPaperDatabaseAdd);
 		
 		JLabel lblUsername = new JLabel("Username:");
@@ -157,7 +156,7 @@ public void actionPerformed(ActionEvent e) {
 				txtUsername.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty() ||
 				txtPassword.getText().trim().isEmpty() || role.equals(null))
 		{
-			JOptionPane.showMessageDialog(null, "Please fill all forms out");
+			JOptionPane.showMessageDialog(null, "All Fields are required to create a user!");
 		}
 	else{
 			if(paperDb.createUser(txtFname.getText().trim(), txtLname.getText().trim(), txtUsername.getText().trim(),

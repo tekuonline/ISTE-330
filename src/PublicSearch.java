@@ -40,12 +40,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 
-import Presentation.*;
+//import Presentation.*;
 
 public class PublicSearch extends JFrame implements MenuListener, ActionListener{
 
@@ -67,13 +66,8 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
 	private JScrollPane JScrollPane;
-	private JList listResultBox = new JList();
-	private DefaultListModel listModel = new DefaultListModel();
-	 private JTable tableResult =new JTable();
-	   private DefaultTableModel model = new DefaultTableModel(); 
-	
-	
- 
+	private JTable tableResult =new JTable();
+    private DefaultTableModel model = new DefaultTableModel(); 
 	
    //search control attributes
 	private JTextField txtKeyword;
@@ -91,14 +85,13 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 	
 	// Search result area attributes
 	private JPanel jPanelSearchArea = new JPanel();
-   private JTextArea txtResultList = new JTextArea();
-   private JPanel jPanelbottomButton = new JPanel();
-   private JButton btnSearch = new JButton("Search");
-   private JButton btnClear = new JButton("Clear");
-   private JButton btnLogin = new JButton("Login");
-   private final JSeparator separator = new JSeparator();
+    private JTextArea txtResultList = new JTextArea();
+    private JPanel jPanelbottomButton = new JPanel();
+    private JButton btnSearch = new JButton("Search");
+    private JButton btnClear = new JButton("Clear");
+    private JButton btnLogin = new JButton("Login");
+    private final JSeparator separator = new JSeparator();
 
-	
 
 	// Create the frame.
 	public PublicSearch() {
@@ -225,19 +218,7 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 					tableResult.getTableHeader().setReorderingAllowed(false);
 					contentPane.add(scrollPane, BorderLayout.CENTER);
 					
-					
-		//  contentPane.add(listResultBox, BorderLayout.CENTER);
-
-
-		
-		
-//		txtResultList.setWrapStyleWord(true);
-//		txtResultList.setLineWrap(true);
-////	txtResultList.add(new JScrollBar());
-//		txtResultList.setText("");
-		//JScrollPane = new JScrollPane(listResultBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    //	contentPane.add(JScrollPane, BorderLayout.CENTER);
-		//txtKeyword.setColumns(10);
+	
 	
 	}
 	//perform action when clear, search or login button is clicked
@@ -246,7 +227,6 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			txtKeyword.setText("");
 			txtTitle.setText("");
 			txtAuthor.setText("");
-			listResultBox.removeAll();
 			clearTable();
 		}
 		
@@ -257,50 +237,31 @@ public class PublicSearch extends JFrame implements MenuListener, ActionListener
 			String keyWords = txtKeyword.getText().trim();
 			
 			paperDb.connect();
-			ArrayList<String> searchPapersAll = null;
-			if (authorName.equals("") && keyWords.equals("") && title.equals("")){
-				 searchPapersAll.removeAll(searchPapersAll);
-				 searchPapersAll.add("Please Narrow your search by some fields");
-				 searchPapersAll.add("");
-				 searchPapersAll.add("");
-			}
+			ArrayList<String> column = new ArrayList<String>();
+			ArrayList<String> values = new ArrayList<String>();
 			
-			if (title.equals("") && authorName.equals("")){
-				searchPapersAll = null;
-				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
+			if(!authorName.isEmpty()){
+				column.add("person.fname");
+				values.add(txtAuthor.getText().trim());
+				System.out.println(txtAuthor.getText().trim());
 			}
-			else if (title.equals("") && keyWords.equals("")){
-				searchPapersAll = null;
-				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
+			if(!title.isEmpty()){
+				column.add("title");
+				values.add(txtTitle.getText().trim());
+				System.out.println(txtTitle.getText().trim());
 			}
-			else if (authorName.equals("") && keyWords.equals("")){
-				searchPapersAll = null;
-				searchPapersAll = paperDb.searchPapersbyTitle(title);
+			if(!keyWords.isEmpty()){
+				column.add("keyword");
+				values.add(txtKeyword.getText().trim());
+				System.out.println(txtKeyword.getText().trim());
 			}
-			else {
-			searchPapersAll = null;
-			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
-			}
-//			txtResultList.setText("");
-//			for(int i = 0; i < paperBytitle.size(); i++) {
-//				  //System.out.println(paperBytitle.get(i)); 
-//				 // txtResultList.append(paperBytitle.get(i)  + "\n");
-//				}
-//			for(int i = 0; i < paperByAuthor.size(); i++) {
-//				  //System.out.println(paperByAuthor.get(i)); 
-//				  //txtResultList.append(paperByAuthor.get(i)  + "\n");
-//				}
-//			for(int i = 0; i < paperByKeyword.size(); i++) {
-//				  //System.out.println(paperByKeyword.get(i)); 
-//				  //txtResultList.append(paperByKeyword.get(i)  + "\n");
-//				}
-			txtResultList.setText("");
+			paperDb.bigList.clear();
+			paperDb.bigList.clear();
 			
-			for(int i = 0; i < searchPapersAll.size(); i++) {
-				 // System.out.println(searchPapersAll.get(i)); 
-				  Object[] paperObj= new Object[]{false, searchPapersAll.get(0), searchPapersAll.get(1), searchPapersAll.get(2)};
-				  System.out.println(paperObj); 
-				  model.addRow(paperObj);
+			paperDb.fetch(column, values);					
+			for(int i = 0; i < paperDb.bigList.size(); i++) {
+				  ArrayList<String> small = paperDb.bigList.get(i);
+				  model.addRow(new Object[]{false, small.get(1), small.get(2), small.get(3)});
 				}	
 		}
 		else if(ae.getActionCommand() == "Login") {

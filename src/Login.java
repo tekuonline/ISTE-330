@@ -25,10 +25,16 @@ import javax.swing.JTextField;
 
 public class Login extends JDialog implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtUsername;
 	private JTextField txtPassword;
 	private PaperDatabase paperDb = new PaperDatabase();
+	private AdminSearch as = new AdminSearch();;
+	private String role1 = "";
 
 
 	/**
@@ -93,14 +99,14 @@ public class Login extends JDialog implements ActionListener {
 			else {
 				String role = paperDb.getRole(txtUsername.getText());
 				if(role.equalsIgnoreCase("faculty")){
-					FacultySearch fs = new FacultySearch();
-					fs.setVisible(true);
+					role1 = "faculty";
 					this.dispose();
 					}
 				else if (role.equalsIgnoreCase("admin")){
-					AdminSearch as = new AdminSearch();
-					as.setVisible(true);
+					role1 = "admin";
+					as.isAdmin();
 					this.dispose();
+					as.isAdmin();
 					}
 				else{
 					this.dispose();
@@ -112,6 +118,11 @@ public class Login extends JDialog implements ActionListener {
 		else if(ae.getActionCommand() =="Cancel") {
 			dispose();		
 		}
+	}
+	public String userType(){
+		return role1;
+		
+		
 	}
 
 }

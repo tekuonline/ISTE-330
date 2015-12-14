@@ -39,6 +39,8 @@ import javax.swing.event.MenuListener;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -53,50 +55,34 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JCheckBox;
 
 public class EditWindow extends JFrame implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtKeyword;
-	private JTextField txtTitle;
-	private JTextField txtcitation;
-	private JTextArea scrollPane;
-	//private JEditorPane editorPane
+	//private JTextField txtKeyword;
+	public JTextField txtTitle;
+	public JTextField txtpaperId;
+	public JTextField txtcitation;
+	public JTextArea txaAbstract;
 	private PaperDatabase paperDb = new PaperDatabase();
+	private AdminSearch as = new AdminSearch();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EditWindow frame = new EditWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public EditWindow() {
 		setTitle("Edit Window");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 585, 369);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		//JScrollPane scrollPane = new JScrollPane();
-		//contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel bottomPanel = new JPanel();
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
@@ -115,14 +101,7 @@ public class EditWindow extends JFrame implements ActionListener{
 
 		topPanel.setLayout(new GridLayout(3,2));
 		contentPane.add(topPanel, BorderLayout.NORTH);
-		JLabel lblKeyword = new JLabel("Keyword:");
-		topPanel.add(lblKeyword);
-		
-		txtKeyword = new JTextField();
-		txtKeyword.setText("");
-		topPanel.add(txtKeyword);
-		txtKeyword.setColumns(10);
-		
+
 		JLabel lblTitle = new JLabel("Title");
 		topPanel.add(lblTitle);
 		
@@ -139,16 +118,22 @@ public class EditWindow extends JFrame implements ActionListener{
 		topPanel.add(txtcitation);
 		txtcitation.setColumns(10);
 		
-		scrollPane = new JTextArea();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setPreferredSize(new Dimension(200, 250));
 		
+		txtpaperId = new JTextField();
+		txtpaperId.setText("");
+		topPanel.add(txtpaperId);
+		txtpaperId.setColumns(10);
+		txtpaperId.setVisible(false);
+		
+		JLabel lblAbstract = new JLabel("Abstract:");
+		topPanel.add(lblAbstract);
+
+		
+		txaAbstract = new JTextArea();
+		contentPane.add(txaAbstract, BorderLayout.CENTER);
+		txaAbstract.setPreferredSize(new Dimension(200, 250));
 		
 	}
-
-	//public EditWindow(FacultySearch facultySearch) {
-		// TODO Auto-generated constructor stub
-	//}
 	
 	//perform action when clear, search or login button is clicked
 	public void actionPerformed(ActionEvent ae) {
@@ -156,27 +141,25 @@ public class EditWindow extends JFrame implements ActionListener{
 		dispose();
 		}
 		else if(ae.getActionCommand() =="Save") {
-			String r = paperDb.getRole();
-			Random rand = new Random();
-			int  n = rand.nextInt(50) + 1;
+			paperDb.connect();
 			String title = txtTitle.getText().trim();
 			String citation = txtcitation.getText().trim();
-			String abst = scrollPane.getText().trim();
+			String abst = txaAbstract.getText().trim();
+			String id = (txtpaperId.getText().trim());
 			System.out.println(title +" " + citation + " "+ abst);
-			String PaperStat = paperDb.insertPaper(n, title, abst, citation);
-			System.out.println(PaperStat);
-			System.out.println(r);
-//			if(PaperStat.equalsIgnoreCase("Cannot add Duplicate Paper!"))	{
-//				System.out.println("Cannot add duplicate paper!");
-//			}
-//			else if (PaperStat.equals("Paper Inserted")){
-//				System.out.println("Paper Inserted");
-//				
-//			}
-//			else if (PaperStat.equals("you are not authorized to add papers")){
-//				
-//				System.out.println("you are not authorized to add papers");
-//			}
+			ArrayList<String> list = new ArrayList<String>();
+			list.add(title);
+			list.add(abst);
+			list.add(citation);
+			list.add(id);
+			String sql = "UPDATE papers SET title = ?, abstract = ?, citation = ? WHERE id = ?";
+			if (paperDb.setData(sql, list)){
+				JOptionPane.showMessageDialog(null, "Updated Paper " + title);
+				this.dispose();
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Could not Update paper");
+			}
 		}
 	}
 

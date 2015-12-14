@@ -186,48 +186,55 @@ public class FacultySearch extends JFrame implements MenuListener, ActionListene
 	
 	//perform action when clear, search or login button is clicked
 	public void actionPerformed(ActionEvent ae) {
-		if(ae.getActionCommand().equals("Clear")) {
+		if(ae.getActionCommand() == ("Reset") || ae.getActionCommand() == "Clear") {
+			txtKeyword.setText("");
 			txtTitle.setText("");
 			txtAuthor.setText("");
-			txtKeyword.setText("");	
-			txtResultList.setText("");
+			//listResultBox.removeAll();
+			//clearTable();
 		}
+		
 		else if(ae.getActionCommand() =="Search") {
-
+			//clearTable();
 			String authorName = txtAuthor.getText().trim();
 			String title = txtTitle.getText().trim();
 			String keyWords = txtKeyword.getText().trim();
 			
 			paperDb.connect();
-			ArrayList<String> searchPapersAll = null;
+			ArrayList<String> column = new ArrayList<String>();
+			ArrayList<String> values = new ArrayList<String>();
 			
-			if (title.equals("") && authorName.equals("")){
-				searchPapersAll = paperDb.searchPapersbyKeyWord(keyWords);
+			if(!authorName.isEmpty()){
+				column.add("person.fname");
+				values.add(txtAuthor.getText().trim());
+				System.out.println(txtAuthor.getText().trim());
 			}
-			else if (title.equals("") && keyWords.equals("")){
-				searchPapersAll = paperDb.searchPapersbyAuthor(authorName);
+			if(!title.isEmpty()){
+				column.add("title");
+				values.add(txtTitle.getText().trim());
+				System.out.println(txtTitle.getText().trim());
 			}
-			else if (authorName.equals("") && keyWords.equals("")){
-				searchPapersAll = paperDb.searchPapersbyTitle(title);
+			if(!keyWords.isEmpty()){
+				column.add("keyword");
+				values.add(txtKeyword.getText().trim());
+				System.out.println(txtKeyword.getText().trim());
 			}
-			else if (authorName.equals("") && keyWords.equals("") && title.equals("")){
-				 txtResultList.append("Please Narrow your search by some fields" + "\n");
-			}
-			else{
-			searchPapersAll = paperDb.searchPapersAll(authorName, title, keyWords);
-			txtResultList.setText("");
-			}
-			for(int i = 0; i < searchPapersAll.size(); i++) {
-				  System.out.println(searchPapersAll.get(i)); 
-				  txtResultList.append(searchPapersAll.get(i)  + "\n");
-			}
+			paperDb.bigList.clear();
+			paperDb.bigList.clear();
 			
+			paperDb.fetch(column, values);					
+			for(int i = 0; i < paperDb.bigList.size(); i++) {
+				  ArrayList<String> small = paperDb.bigList.get(i);
+				 //model.addRow(new Object[]{false, small.get(1), small.get(2), small.get(3)});
+				}	
+		}
+		else if(ae.getActionCommand().equalsIgnoreCase("Exit")) {
+			 System.exit(0); 
 		}
 		else if(ae.getActionCommand() == "Logout") {
 			dispose();
 					
 		}
-		
 		else if(ae.getActionCommand() == "Add") {
 			 EditWindow ed = new EditWindow();	
 			 setVisible(true);
