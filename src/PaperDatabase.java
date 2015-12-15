@@ -80,7 +80,6 @@ public class PaperDatabase implements Authenticate {
 	 */
 	public ArrayList getData(String sql, ArrayList list) {
 		try {
-			// System.out.println("List size"+ list.size());
 			rs = prepare(sql, list).executeQuery(); // call prepare method
 			rsmd = rs.getMetaData();
 			while (rs.next()) {
@@ -328,21 +327,7 @@ public class PaperDatabase implements Authenticate {
 			 * @return
 			 */
 
-	/*
-	 * public boolean getPaper(int paperId) { String select =
-	 * "SELECT * FROM papers WHERE id = ?"; try { PreparedStatement pstmt =
-	 * prepare(select); // PreparedStatement pstmt =
-	 * connection.prepareStatement(select)) { pstmt.setInt(1, paperId);
-	 * ResultSet rs = pstmt.executeQuery(); while (rs.next()) { String id =
-	 * rs.getString("id"); String title = rs.getString("title"); String ab =
-	 * rs.getString("abstract"); String citation = rs.getString("citation");
-	 * System.out.println("Paper ID: " + id); System.out.println("Title: " +
-	 * title); System.out.println("Abstract: " + ab); System.out.println(
-	 * "Citation: " + citation);
-	 * 
-	 * } return true; } catch (SQLException e) { e.printStackTrace(); } return
-	 * false; }
-	 */
+	
 	/*	*//**
 			 * Delete the paper using paper id
 			 * 
@@ -363,18 +348,7 @@ public class PaperDatabase implements Authenticate {
 	 * @param updatePaperid
 	 * @return
 	 */
-	/*
-	 * public String updatePaper(int updatePaperid, String title, String abst,
-	 * String citation) { if (role.equalsIgnoreCase("faculty") &&
-	 * (paperdata.isAuthenticated() == true)) { String update =
-	 * "UPDATE `papers` SET `title`=?,`abstract`=?,`citation`=? WHERE id = ?;";
-	 * try (PreparedStatement pstmt = prepare(update)) { pstmt.setInt(4,
-	 * updatePaperid); pstmt.setString(1, title); pstmt.setString(2, abst);
-	 * pstmt.setString(3, citation); int rs = pstmt.executeUpdate(); return
-	 * "Paper " + updatePaperid + " Updated"; } catch (SQLException e) {
-	 * e.printStackTrace(); return "Error Updating paper" + updatePaperid + "";
-	 * } } return "You are not authorized to update the paper!"; }
-	 */
+	
 
 	/**
 	 * 
@@ -389,10 +363,9 @@ public class PaperDatabase implements Authenticate {
 		list.add(title);
 		list.add(abst);
 		list.add(citation);
-		// sql = "INSERT INTO papers VALUES (?,?,?)";
+	
 		sql = "INSERT INTO papers VALUES (92,'test','test','test');";
-		// setData(sql,list);
-		// System.out.println(sql);
+	
 		try {
 
 			stmt.executeUpdate(sql);
@@ -408,45 +381,14 @@ public class PaperDatabase implements Authenticate {
 	 * @param insertPaperid
 	 * @param Keyword
 	 * @return
-	 *//*
-		 * public String insertKeywords(int insertPaperid, String Keyword) { if
-		 * (role.equalsIgnoreCase("faculty") && (paperdata.isAuthenticated() ==
-		 * true)) { String insertPaper =
-		 * "INSERT INTO paper_keywords VALUES (?,?)";
-		 * 
-		 * try (PreparedStatement pstmt = prepare(insertPaper)) {
-		 * pstmt.setInt(1, insertPaperid); pstmt.setString(2, Keyword); int rs =
-		 * pstmt.executeUpdate(); return "Keyword " + Keyword +
-		 * " for paper id = " + insertPaperid + " Inserted"; } catch
-		 * (SQLException e) { // System.out.println(e.getMessage()); return
-		 * "Duplicate Keywords cant be added"; } } return
-		 * "you are not authorized to add Keywords"; }
-		 */
-
+	 */
 	/**
 	 * get all the papers for the logged in user.
 	 * 
 	 * @param username
 	 * @return
 	 */
-	/*
-	 * public String getMyPapers(String username) { String search =
-	 * "SELECT papers.`id`, papers.`title`, papers.`abstract`, papers.`citation` From "
-	 * +
-	 * "`papers` JOIN `authorship` ON authorship.personId=papers.id  JOIN person ON person.`id`= authorship.personId  WHERE person.username = ?;"
-	 * ;
-	 * 
-	 * try (PreparedStatement pstmt = prepare(search)) { pstmt.setString(1,
-	 * username); ResultSet rs = pstmt.executeQuery(); while (rs.next()) {
-	 * String id = rs.getString("id"); String title = rs.getString("title");
-	 * String ab = rs.getString("abstract"); String citation =
-	 * rs.getString("citation");
-	 * 
-	 * System.out.println("Paper ID: " + id); System.out.println("Title: " +
-	 * title); System.out.println("Abstract: " + ab); System.out.println(
-	 * "Citation: " + citation); } return ""; } catch (SQLException e) {
-	 * e.printStackTrace(); } return "Could not find your papers"; }
-	 */
+	
 	public String getRole() {
 		return role;
 	}
@@ -454,10 +396,7 @@ public class PaperDatabase implements Authenticate {
 	public Connection getConnection() {
 		return getConnection();
 	}
-	/*
-	 * public void setConnection(Connection connection) { this.connection =
-	 * connection; }
-	 */
+	
 
 } // end class
 

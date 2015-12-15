@@ -1,7 +1,7 @@
 
 
 /*
- * Author Tek Nepal
+ * @author Tek, Qioaran, Chanvi
  */
 public class Paper
 {

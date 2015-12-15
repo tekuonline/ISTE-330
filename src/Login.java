@@ -2,7 +2,7 @@
 
 /**
  * ISTE 330 Part 3
- * Contributor: Tek, Qiaoran, Chanvi
+ * @author  Tek, Qiaoran, Chanvi
  * Professor: Micheal Floeser
  * A class for Login Window
  */
@@ -87,6 +87,13 @@ public class Login extends JDialog implements ActionListener {
 		}
 		
 	}
+	public Login() {
+		// TODO Auto-generated constructor stub
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("OK")){
 			paperDb.connect();

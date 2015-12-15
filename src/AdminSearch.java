@@ -1,7 +1,7 @@
 
 /**
  * ISTE 330 Part 3
- * Contributor: Tek, Qiaoran, Chanvi
+ * @author  Tek, Qiaoran, Chanvi
  * Professor: Micheal Floeser
  * A class for Admin Search Window
  */
@@ -36,9 +36,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-/*
- * Author Tek Nepal
- */
 public class AdminSearch extends JFrame implements MenuListener, ActionListener, TableModelListener {
 
 	public int selectedPaperID;
@@ -181,7 +178,6 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		jPanelbottomButton.add(btnlogin);
 		btnlogin.addActionListener(this);
 		jPanelbottomButton.add(btnlogin);
-		//btnUpdate.setEnabled(false);
 		isPublic();
 
 		model = new DefaultTableModel(null, new String[] { "Select", "ID", "Title", "Abstract", "Citation" }) {
@@ -280,14 +276,15 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		} else if (ae.getActionCommand().equalsIgnoreCase("Exit")) {
 			System.exit(0);
 		} else if (ae.getActionCommand().equalsIgnoreCase("How to use -->")) {
-			try {
-				Runtime.getRuntime().exec("hh.exe ..\\help\\pd.chm");
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-				System.out.println(
-						"CHM file only works on Windows Machines!\n" 
-								+ "Please use the CHM viewer Mac to see the help file");
-			}
+			openPage();
+//			try {
+//				Runtime.getRuntime().exec("hh.exe ..\\help\\pd.chm");
+//			} catch (IOException ioe) {
+//				ioe.printStackTrace();
+//				System.out.println(
+//						"CHM file only works on Windows Machines!\n" 
+//								+ "Please use the CHM viewer Mac to see the help file");
+//			}
 		} else if (ae.getActionCommand().equalsIgnoreCase("About")) {
 
 			JOptionPane.showMessageDialog(null, "Paper Search Database " + "By Group 11\n " + "\u00a9 2015 \n"
@@ -430,6 +427,19 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		
 		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
+	}
+	/**
+	 * Opens the help website from the menu
+	 */
+	public void openPage(){
+	       try {
+	         String url = "https://teknepal.com/paperHelp/";
+	         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+	       }
+	       catch (java.io.IOException e) {
+	           System.out.println(e.getMessage());
+	       }
+	   
 	}
 
 

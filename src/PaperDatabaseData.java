@@ -1,7 +1,7 @@
 
 /**
  * @authors TekNepal, Qiaoran Li, Chanvi Kotak
- *
+ * accessors and mutators for authentication and connection
  */
 
 import java.sql.Connection;

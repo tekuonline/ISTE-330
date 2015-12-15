@@ -2,7 +2,7 @@
 
 /**
  * ISTE 330 Part 3
- * Contributor: Tek, Qiaoran, Chanvi
+ * @author  Tek, Qiaoran, Chanvi
  * Professor: Micheal Floeser
  * A class for Edit Window
  */
@@ -62,9 +62,6 @@ import javax.swing.JCheckBox;
 
 public class EditWindow extends JFrame implements ActionListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	//private JTextField txtKeyword;
@@ -74,7 +71,9 @@ public class EditWindow extends JFrame implements ActionListener{
 	public JTextArea txaAbstract;
 	private PaperDatabase paperDb = new PaperDatabase();
 	private AdminSearch as = new AdminSearch();
-
+/**
+ * creating dialog for edit page
+ */
 	public EditWindow() {
 		setTitle("Edit Window");
 		setBounds(100, 100, 585, 369);

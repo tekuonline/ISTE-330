@@ -1,6 +1,6 @@
 /**
  * @author TekNepal, Qiaoran Li, Chanvi Kotak
- *
+ * Authentication for database connectivity
  */
 public interface Authenticate {
 	static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
