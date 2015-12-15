@@ -47,14 +47,10 @@ public class PaperDatabase implements Authenticate {
 				// System.out.println("Connected to database!");
 
 			} catch (SQLException e) {
-				System.out.println("Error  " + e.getMessage()); // delete this
-																// after all
-																// done
-				e.printStackTrace(); // delete this after all done
+				System.out.println("Error  " + e.getMessage());
+				e.printStackTrace(); 
 			} catch (ClassNotFoundException ex) {
-				System.out.println("Error  " + ex.getMessage()); // delete this
-																	// after all
-																	// done
+				System.out.println("Error  " + ex.getMessage());
 			}
 		}
 		return paperdata.getConnection();
@@ -68,12 +64,6 @@ public class PaperDatabase implements Authenticate {
 			try {
 				paperdata.getConnection().close();
 				paperdata.setConnection(null);
-				// System.out.println("Closed the connection to the server"); //
-				// delete
-				// this
-				// after
-				// all
-				// done
 			} catch (SQLException e) {
 				e.printStackTrace(); // delete this after all done
 			}

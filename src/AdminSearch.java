@@ -182,6 +182,8 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		jPanelbottomButton.add(btnlogin);
 		btnlogin.addActionListener(this);
 		jPanelbottomButton.add(btnlogin);
+		//btnUpdate.setEnabled(false);
+		isPublic();
 
 		model = new DefaultTableModel(null, new String[] { "Select", "ID", "Title", "Abstract", "Citation" }) {
 			/**
@@ -273,7 +275,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 			}
 
 		} else if (ae.getActionCommand() == "Login") {
-			login = new Login();
+			login = new Login(this);
 
 			this.setVisible(true);
 			login.setVisible(true);
@@ -281,11 +283,12 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 			System.exit(0);
 		} else if (ae.getActionCommand().equalsIgnoreCase("How to use -->")) {
 			try {
-				Runtime.getRuntime().exec("hh.exe ..\\help\\Paperdatabase.chm");
+				Runtime.getRuntime().exec("hh.exe ..\\help\\pd.chm");
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 				System.out.println(
-						"CHM file only works on Windows Machines!\n" + "Please use the CHM viewer Mac to see the help file");
+						"CHM file only works on Windows Machines!\n" 
+								+ "Please use the CHM viewer Mac to see the help file");
 			}
 		} else if (ae.getActionCommand().equalsIgnoreCase("About")) {
 
@@ -301,7 +304,12 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 			setVisible(true);
 			ed.setVisible(true);
 
-		} else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
+		}
+		else if (ae.getActionCommand() == "Logout") {
+			isPublic();
+
+		}
+		else if (ae.getActionCommand().equalsIgnoreCase("Add user")) {
 			AddUser aduser = new AddUser();
 			this.setVisible(true);
 			aduser.setVisible(true);
@@ -364,12 +372,15 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		btnuser.setEnabled(true);
 
 		btnAdd.setEnabled(true);
-
-		contentPane.revalidate();
-		contentPane.repaint();
+		
+		btnlogin.setVisible(false);
+		
+		lblHello.setText("Hello Admin");
+		lblHello.setForeground(Color.red);
 	}
 
 	public void isFaculty() {
+		
 		btnUpdate.setEnabled(true);
 
 		btnDelete.setEnabled(true);
@@ -379,6 +390,9 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		btnuser.setEnabled(false);
 
 		btnAdd.setEnabled(true);
+		
+		lblHello.setText("Hello Faculty");
+		lblHello.setForeground(Color.red);
 	}
 
 	private void isPublic() {
@@ -391,6 +405,14 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		btnuser.setEnabled(false);
 
 		btnAdd.setEnabled(false);
+		
+		btnlogin.setEnabled(true);
+		
+		btnlogin.setVisible(true);
+		
+		lblHello.setText("Hello User");
+		
+		lblHello.setForeground(Color.red);
 	}
 
 	@Override

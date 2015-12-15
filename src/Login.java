@@ -33,14 +33,15 @@ public class Login extends JDialog implements ActionListener {
 	private JTextField txtUsername;
 	private JTextField txtPassword;
 	private PaperDatabase paperDb = new PaperDatabase();
-	private AdminSearch as = new AdminSearch();;
+	private AdminSearch as = null;
 	private String role1 = "";
 
 
 	/**
 	 * Create the dialog.
 	 */
-	public Login() {
+	public Login(AdminSearch asIn) {
+		as = asIn;
 		setTitle("Login Window");
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 398, 146);
@@ -101,10 +102,11 @@ public class Login extends JDialog implements ActionListener {
 				if(role.equalsIgnoreCase("faculty")){
 					role1 = "faculty";
 					this.dispose();
+					as.isFaculty();
+					
 					}
 				else if (role.equalsIgnoreCase("admin")){
 					role1 = "admin";
-					as.isAdmin();
 					this.dispose();
 					as.isAdmin();
 					}
@@ -120,9 +122,7 @@ public class Login extends JDialog implements ActionListener {
 		}
 	}
 	public String userType(){
-		return role1;
-		
-		
+		return role1;	
 	}
 
 }
