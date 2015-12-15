@@ -56,7 +56,6 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 	private JMenu mnHelp = new JMenu("Help");
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
-	private JScrollPane JScrollPane;
 	Login login;
 
 	// search control attributes
@@ -90,7 +89,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 	// Create the frame.
 	public AdminSearch() {
 
-		setTitle("Administrator Search Window");
+		setTitle("Paper Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 593, 355);
 		setSize(900, 500);
@@ -276,7 +275,6 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 
 		} else if (ae.getActionCommand() == "Login") {
 			login = new Login(this);
-
 			this.setVisible(true);
 			login.setVisible(true);
 		} else if (ae.getActionCommand().equalsIgnoreCase("Exit")) {
@@ -375,7 +373,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		
 		btnlogin.setVisible(false);
 		
-		lblHello.setText("Hello Admin");
+		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
 	}
 
@@ -391,7 +389,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 
 		btnAdd.setEnabled(true);
 		
-		lblHello.setText("Hello Faculty");
+		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
 	}
 
@@ -414,6 +412,26 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 		
 		lblHello.setForeground(Color.red);
 	}
+	
+	public void isStudent() {
+		btnUpdate.setEnabled(false);
+
+		btnDelete.setEnabled(false);
+
+		btnLogout.setEnabled(false);
+
+		btnuser.setEnabled(false);
+
+		btnAdd.setEnabled(false);
+		
+		btnlogin.setEnabled(true);
+		
+		btnlogin.setVisible(true);
+		
+		lblHello.setText("Hello " +login.userName());
+		lblHello.setForeground(Color.red);
+	}
+
 
 	@Override
 	public void menuCanceled(MenuEvent arg0) {

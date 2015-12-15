@@ -90,7 +90,7 @@ public class Login extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("OK")){
 			paperDb.connect();
-			boolean connected = paperDb.authenticateUser(txtUsername.getText(), txtPassword.getText());
+			boolean connected = paperDb.authenticateUser(txtUsername.getText().trim(), txtPassword.getText().trim());
 			if (!connected){
 				JOptionPane.showMessageDialog(this,
 					    "Invalid username or password",
@@ -100,15 +100,20 @@ public class Login extends JDialog implements ActionListener {
 			else {
 				String role = paperDb.getRole(txtUsername.getText());
 				if(role.equalsIgnoreCase("faculty")){
-					role1 = "faculty";
+					role1 = "Faculty";
 					this.dispose();
 					as.isFaculty();
 					
 					}
 				else if (role.equalsIgnoreCase("admin")){
-					role1 = "admin";
+					role1 = "Admin";
 					this.dispose();
 					as.isAdmin();
+					}
+				else if (role.equalsIgnoreCase("Student")){
+					role1 = "Student";
+					this.dispose();
+					as.isStudent();
 					}
 				else{
 					this.dispose();
@@ -121,8 +126,8 @@ public class Login extends JDialog implements ActionListener {
 			dispose();		
 		}
 	}
-	public String userType(){
-		return role1;	
+	public String userName(){
+		return txtUsername.getText().trim() + ", you are a " + role1;	
 	}
 
 }
