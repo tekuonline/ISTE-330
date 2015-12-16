@@ -35,8 +35,6 @@ public class PaperDatabase implements Authenticate {
 	/**
 	 * Connect to the database
 	 * 
-	 * @param user
-	 * @param pass
 	 * @return
 	 */
 	public Connection connect() {
@@ -72,11 +70,8 @@ public class PaperDatabase implements Authenticate {
 
 	/**
 	 * getData
-	 * 
-	 * @param sql
-	 *            is a sql statement assigned by the user
-	 * @param list
-	 *            is a arraylist containing string values
+	 * @param sql is a sql statement assigned by the user
+	 * @param list is a arraylist containing string values
 	 */
 	public ArrayList getData(String sql, ArrayList list) {
 		try {
@@ -91,9 +86,8 @@ public class PaperDatabase implements Authenticate {
 				bigList.add(tempSmallList);
 			}
 
-		} catch (SQLException sqle1) {
-
-			sqle1.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 			return null;
 		}
 		return bigList;
@@ -106,20 +100,14 @@ public class PaperDatabase implements Authenticate {
 		try {
 			prepare(sql, list).executeUpdate(); // call prepare method
 			return true;
-
 		} catch (SQLException s) {
-
 			s.printStackTrace();
 			return false;
 		}
 	}
 
-	/**
-	 * A method to generate a select statement with equipment id
-	 * 
-	 * @param integer:
-	 *            equipment id set equipid, equipmentname, equipment
-	 *            Description, and equipment capacity with the resultSet value
+	/*
+	 * fetch method to fetch the data from database. 
 	 */
 	public void fetch(ArrayList<String> column, ArrayList<String> value) {
 		switch (column.size()) {
@@ -129,7 +117,6 @@ public class PaperDatabase implements Authenticate {
 					+ " left join person on authorship.personId = person.id"
 					+ " left join paper_keywords on papers.id = paper_keywords.id" + " WHERE " + column.get(0)
 					+ " like ?;";
-			// System.out.println(sql);
 			break;
 		case 2:
 			sql = " SELECT distinct papers.id,title,abstract,citation from papers "
@@ -164,13 +151,9 @@ public class PaperDatabase implements Authenticate {
 					pstmt.setInt(i + 1, d);
 				} catch (Exception test) {
 					String test1 = value.get(i).toString();
-					// System.out.println(test1);
 					pstmt.setString(i + 1, value.get(i).toString());
-					// pstmt.setString(i+1,"%" +test1 +"%");
-					// test.printStackTrace();
 				}
 			}
-			// System.out.println(pstmt);
 			return pstmt;
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -180,7 +163,6 @@ public class PaperDatabase implements Authenticate {
 
 	/**
 	 * Encodes the String using MD5 for password.
-	 * 
 	 * @param aString
 	 * @return
 	 * @throws NoSuchAlgorithmException
@@ -244,11 +226,9 @@ public class PaperDatabase implements Authenticate {
 
 			return "Created";
 		} catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException ex) {
-			// System.out.println(ex.getMessage());
 			if (ex.getMessage().contains("Duplicate entry")) {
 				return "Duplicate";
 			}
-			// ex.printStackTrace();
 			return "Could Not Create";
 		}
 	}
@@ -304,7 +284,6 @@ public class PaperDatabase implements Authenticate {
 			 * @param username
 			 * @return
 			 */
-
 	public String getRole(String username) {
 		String getrole = "SELECT role FROM person WHERE username = ?";
 		try (PreparedStatement pstmt = this.connect().prepareStatement(getrole)) {
@@ -319,21 +298,13 @@ public class PaperDatabase implements Authenticate {
 		}
 		return "error";
 	}
-
-	/*	*//**
-			 * gets the paper using paper id.
-			 * 
-			 * @param paperId
-			 * @return
-			 */
-
 	
-	/*	*//**
-			 * Delete the paper using paper id
-			 * 
-			 * @param paperId
-			 * @return
-			 */
+	/**
+	 * Delete the paper using paper id
+	 * 
+	 * @param paperId
+	 * @return
+	*/
 	public boolean deletePapers(int paperId) {
 		String delete = "DELETE FROM papers WHERE id = ?";
 		ArrayList<String> value = new ArrayList<String>();
@@ -341,15 +312,7 @@ public class PaperDatabase implements Authenticate {
 		boolean success = setData(delete, value);
 		return success;
 	}
-
-	/**
-	 * update paper using paperID
-	 * 
-	 * @param updatePaperid
-	 * @return
-	 */
 	
-
 	/**
 	 * 
 	 * @param insertPaperid
@@ -375,13 +338,6 @@ public class PaperDatabase implements Authenticate {
 		return "you are not authorized to add papers";
 	}
 
-	/**
-	 * insert keywords
-	 * 
-	 * @param insertPaperid
-	 * @param Keyword
-	 * @return
-	 */
 	/**
 	 * get all the papers for the logged in user.
 	 * 

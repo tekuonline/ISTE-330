@@ -31,7 +31,7 @@ public class AddWindow extends JFrame implements ActionListener {
 	public JTextField txtcitation;
 	public JTextArea txaAbstract;
 	private PaperDatabase paperDb = new PaperDatabase();
-	private AdminSearch as = new AdminSearch();
+	private SearchWindow as = new SearchWindow();
 
 	public AddWindow() {
 		setTitle("Edit Window");

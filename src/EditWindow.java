@@ -70,7 +70,7 @@ public class EditWindow extends JFrame implements ActionListener{
 	public JTextField txtcitation;
 	public JTextArea txaAbstract;
 	private PaperDatabase paperDb = new PaperDatabase();
-	private AdminSearch as = new AdminSearch();
+	private SearchWindow as = new SearchWindow();
 /**
  * creating dialog for edit page
  */

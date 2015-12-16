@@ -33,14 +33,14 @@ public class Login extends JDialog implements ActionListener {
 	private JTextField txtUsername;
 	private JTextField txtPassword;
 	private PaperDatabase paperDb = new PaperDatabase();
-	private AdminSearch as = null;
+	private SearchWindow as = null;
 	private String role1 = "";
 
 
 	/**
 	 * Create the dialog.
 	 */
-	public Login(AdminSearch asIn) {
+	public Login(SearchWindow asIn) {
 		as = asIn;
 		setTitle("Login Window");
 		setLocationRelativeTo(null);

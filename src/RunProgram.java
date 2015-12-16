@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.event.MenuListener;
 
-//import Presentation.*;
 
 /**
  * @authors TekNepal, Qiaoran Li, Chanvi Kotak
@@ -20,7 +19,7 @@ public class RunProgram {
 				try {
 					
 					paperDb.connect();
-					AdminSearch frame = new AdminSearch();
+					SearchWindow frame = new SearchWindow();
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -29,7 +28,4 @@ public class RunProgram {
 			}
 		});
 	}
-
-
-
 }

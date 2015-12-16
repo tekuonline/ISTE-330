@@ -36,7 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-public class AdminSearch extends JFrame implements MenuListener, ActionListener, TableModelListener {
+public class SearchWindow extends JFrame implements MenuListener, ActionListener, TableModelListener {
 
 	public int selectedPaperID;
 	public ArrayList<String> selectedList = new ArrayList<String>();
@@ -84,7 +84,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 	private JButton btnlogin = new JButton("Login");
 
 	// Create the frame.
-	public AdminSearch() {
+	public SearchWindow() {
 
 		setTitle("Paper Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -243,20 +243,24 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 			if (!authorName.isEmpty()) {
 				column.add("person.fname");
 				values.add(txtAuthor.getText().trim());
-				System.out.println(txtAuthor.getText().trim());
+				//System.out.println(txtAuthor.getText().trim());
 			}
 			if (!title.isEmpty()) {
 				column.add("title");
 				values.add(txtTitle.getText().trim());
-				System.out.println(txtTitle.getText().trim());
+				//System.out.println(txtTitle.getText().trim());
 			}
 			if (!keyWords.isEmpty()) {
 				column.add("keyword");
 				values.add(txtKeyword.getText().trim());
-				System.out.println(txtKeyword.getText().trim());
+				//System.out.println(txtKeyword.getText().trim());
 			}
+			if (authorName.isEmpty() && keyWords.isEmpty() && title.isEmpty()) {
+				column.add("person.fname");
+				values.add(txtAuthor.getText().trim());
 			paperDb.bigList.clear();
 			paperDb.bigList.clear();
+			}
 
 			paperDb.fetch(column, values);
 			if (paperDb.bigList.size() > 0) {
@@ -265,7 +269,6 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 					model.addRow(new Object[] { false, small.get(0), small.get(1), small.get(2), small.get(3) });
 				}
 			} else {
-
 				lblMessage.setText("No record found.");
 			}
 
@@ -289,18 +292,20 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 
 			JOptionPane.showMessageDialog(null, "Paper Search Database " + "By Group 11\n " + "\u00a9 2015 \n"
 					+ "Chanvi Kotak\n" + "Qiaoran Li\n" + "Tek Nepal\n");
-		} else if (ae.getActionCommand() == "Delete") {
-			if (paperDb.deletePapers(selectedPaperID)) {
-				JOptionPane.showMessageDialog(null, "Deleted selected paper ");
-				clearTable();
+		} else if (ae.getActionCommand().equals("Delete")) {
+			if(JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + selectedList.get(1) ) == 0){
+				if (paperDb.deletePapers(selectedPaperID)) {
+						JOptionPane.showMessageDialog(null, "Deleted paper "+ selectedList.get(1));
+						clearTable();
+				}
 			}
-		} else if (ae.getActionCommand() == "Add Paper") {
+		} else if (ae.getActionCommand().equals("Add Paper")) {
 			AddWindow ed = new AddWindow();
 			setVisible(true);
 			ed.setVisible(true);
 
 		}
-		else if (ae.getActionCommand() == "Logout") {
+		else if (ae.getActionCommand().equals("Logout")) {
 			isPublic();
 
 		}
@@ -340,7 +345,7 @@ public class AdminSearch extends JFrame implements MenuListener, ActionListener,
 				selectedList.add(model.getValueAt(row, column + 3).toString());
 				selectedList.add(model.getValueAt(row, column + 4).toString());
 				for (int i = 0; i < selectedList.size(); i++) {
-					System.out.println(selectedList.get(i));
+					//System.out.println(selectedList.get(i));
 
 				}
 			} else {
