@@ -1,8 +1,4 @@
 
-/*
- *@author Tek,Qioaran,Chanvi
- */
-import java.util.*;
 
 public class Person
 {

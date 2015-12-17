@@ -264,9 +264,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			if (authorName.isEmpty() && keyWords.isEmpty() && title.isEmpty()) {
 				column.add("person.fname");
 				values.add(txtAuthor.getText().trim());
-			paperDb.bigList.clear();
-			paperDb.bigList.clear();
 			}
+			
+			paperDb.bigList.clear();
+			paperDb.bigList.clear();
 
 			paperDb.fetch(column, values);
 			if (paperDb.bigList.size() > 0) {
@@ -324,20 +325,6 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			this.setVisible(true);
 			aduser.setVisible(true);
 		} else if (ae.getActionCommand().equalsIgnoreCase("Update")) {
-			paperDb.smallList.clear();
-			paperDb.bigList.clear();
-			EditWindow ed = new EditWindow();
-			ArrayList<String> value = new ArrayList<String>();
-			ed.txtpaperId.setText(selectedList.get(0));
-			ed.txtTitle.setText(selectedList.get(1));
-			ed.txtcitation.setText(selectedList.get(3));
-			ed.txaAbstract.setText(selectedList.get(2));
-			ed.txaAbstract.setWrapStyleWord(true);
-			ed.txaAbstract.setLineWrap(true);
-			setVisible(true);
-			ed.setVisible(true);
-		}
-		else if (ae.getActionCommand().equalsIgnoreCase("View")) {
 			paperDb.smallList.clear();
 			paperDb.bigList.clear();
 			EditWindow ed = new EditWindow();
