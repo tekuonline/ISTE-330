@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link type="text/css" href="jqueryui.css" rel="stylesheet" />	
+		<link rel="stylesheet" href="jquery.treeview.css" />
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="jqueryui.js"></script>
+		<script type="text/javascript" src="index.js"></script>
+		<script type="text/javascript" src="search.js"></script>
+
+		<script type="text/javascript">
+			$(function() {
+				$("#tabs").tabs();
+			});
+		</script>
+
+		<script src="jquery.treeview.js" type="text/javascript"></script>
+		<script>
+			$(document).ready(function(){
+		
+				$("#contents").treeview({
+					persist: "location",
+					collapsed: true,
+					unique: true
+				});
+
+				$("#index").treeview({
+					persist: "location",
+					collapsed: true,
+					unique: true
+				});
+
+		        });
+
+		function SelectTocItem(sLinkHref)
+		{
+			$(".file a").each(function()
+			{
+				if ($.inArray(sLinkHref + '.htm', this.href) > -1) $(this).css('font-weight', 'bold')
+				else $(this).css('font-weight', '');
+			});
+		}
+
+		</script>
+		<style type="text/css">
+			/*demo page css*/
+			body{ font-size: 70%;}
+		</style>	
+
+</head>
+<body>
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Contents</a></li>
+		<li><a href="#tabs-2">Index</a></li>
+		<li><a href="#tabs-3">Search</a></li>
+	</ul>
+	<div id="tabs-1">
+<ul id="contents" class="filetree">
+<li><span class="file"><a href="about.html" target="RightFrame">About</a></span>
+</li>
+<li><span class="file"><a href="support.html" target="RightFrame">Support</a></span>
+</li>
+<li><span class="file"><a href="order.html" target="RightFrame">Order</a></span>
+</li>
+<li><span class="folder"><a href="gettingstarted.html" target="RightFrame">Getting Started</a></span>
+<ul>
+<li><span class="file"><a href="mainmenu.html" target="RightFrame">Main Menu</a></span>
+</li>
+<li><span class="file"><a href="toolbar.html" target="RightFrame">Footer Controls</a></span>
+</li>
+
+</ul>
+</li>
+<li><span class="folder"><a href="tutorial.html" target="RightFrame">Tutorial</a></span>
+<ul>
+<li><span class="file"><a href="task1.html" target="RightFrame">Login Screen </a></span>
+</li>
+<li><span class="file"><a href="task2.html" target="RightFrame">Public Screen</a></span>
+</li>
+<li><span class="file"><a href="adduser.html" target="RightFrame">Add User </a></span>
+</li>
+<li><span class="file"><a href="addpaper.html" target="RightFrame">Add Paper </a></span>
+</li>
+<li><span class="file"><a href="updatepaper.html" target="RightFrame">Update Paper </a></span>
+</li>
+<li><span class="file"><a href="loginscreen.html" target="RightFrame">Login Screen</a></span>
+</li>
+<li><span class="file"><a href="deletepaper.html" target="RightFrame">Delete Paper </a></span>
+</li>
+
+</ul>
+</li>
+<li><span class="folder"><a href="typesofusers0.html" target="RightFrame">Types of users </a></span>
+<ul>
+<li><span class="file"><a href="public.html" target="RightFrame">Public </a></span>
+</li>
+<li><span class="file"><a href="student.html" target="RightFrame">Student</a></span>
+</li>
+<li><span class="file"><a href="faculty.html" target="RightFrame">Faculty</a></span>
+</li>
+<li><span class="file"><a href="administrator.html" target="RightFrame">Administrator</a></span>
+</li>
+
+</ul>
+</li>
+
+</li>
+</ul>
+
+	</div>
+	<div id="tabs-2">
+<ul id="index">
+<li><a href="mainmenu.html" target="RightFrame">about</a>
+</li>
+<li><a href="kw-getting-started.html" target="RightFrame">getting started</a>
+</li>
+<li><a href="gettingstarted.html" target="RightFrame">start</a>
+</li>
+<li><a href="order.html" target="RightFrame">teknepal</a>
+</li>
+<li><a href="kw-users-types.html" target="RightFrame">users types</a>
+</li>
+<li><a href="kw-what-is-it.html" target="RightFrame">what is it</a>
+</li>
+</ul>
+
+	</div>
+	<div id="tabs-3">
+		<form onsubmit="requery();return false">
+			<input id="squery" type="text" name="q" autocomplete="off"/>
+			<input type="button" value=">" onclick="requery()">
+		</form>
+
+		<p>
+		<div id="results">
+		</div>
+
+	</div>
+</div>
+
+</body>
+</html>

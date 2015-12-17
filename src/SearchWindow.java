@@ -8,11 +8,14 @@
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -53,6 +56,7 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 	private JMenu mnHelp = new JMenu("Help");
 	private JMenuItem mntmAbout = new JMenuItem("About");
 	private JMenuItem mntmHowToUse = new JMenuItem("How to use -->");
+	private JMenuItem mntmEmail = new JMenuItem("Email us!");
 	Login login;
 
 	// search control attributes
@@ -110,6 +114,8 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		mntmAbout.addActionListener(this);
 		mnHelp.add(mntmHowToUse);
 		mntmHowToUse.addActionListener(this);
+		mnHelp.add(mntmEmail);
+		mntmEmail.addActionListener(this);
 
 		/**
 		 * Main panel with in the frame
@@ -280,6 +286,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			System.exit(0);
 		} else if (ae.getActionCommand().equalsIgnoreCase("How to use -->")) {
 			openPage();
+		}
+		 else if (ae.getActionCommand().equalsIgnoreCase("Email us!")) {
+				Sendmail();
+				
 //			try {
 //				Runtime.getRuntime().exec("hh.exe ..\\help\\pd.chm");
 //			} catch (IOException ioe) {
@@ -318,6 +328,19 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			paperDb.bigList.clear();
 			EditWindow ed = new EditWindow();
 			ArrayList<String> value = new ArrayList<String>();
+			ed.txtpaperId.setText(selectedList.get(0));
+			ed.txtTitle.setText(selectedList.get(1));
+			ed.txtcitation.setText(selectedList.get(3));
+			ed.txaAbstract.setText(selectedList.get(2));
+			ed.txaAbstract.setWrapStyleWord(true);
+			ed.txaAbstract.setLineWrap(true);
+			setVisible(true);
+			ed.setVisible(true);
+		}
+		else if (ae.getActionCommand().equalsIgnoreCase("View")) {
+			paperDb.smallList.clear();
+			paperDb.bigList.clear();
+			EditWindow ed = new EditWindow();
 			ed.txtpaperId.setText(selectedList.get(0));
 			ed.txtTitle.setText(selectedList.get(1));
 			ed.txtcitation.setText(selectedList.get(3));
@@ -429,23 +452,54 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		btnlogin.setEnabled(true);
 		
 		btnlogin.setVisible(true);
-		
+
 		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
 	}
+
 	/**
-	 * Opens the help website from the menu
+	 * Opens the help website from help menu
 	 */
 	public void openPage(){
-	       try {
-	         String url = "https://teknepal.com/paperHelp/";
-	         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
-	       }
-	       catch (java.io.IOException e) {
-	           System.out.println(e.getMessage());
-	       }
-	   
+		String htmlFilePath = "help/index.html"; // path to help file
+		File htmlFile = new File(htmlFilePath);
+		        // open the default web browser for the HTML page
+		try {
+			Desktop.getDesktop().open(htmlFile);
+			Desktop.getDesktop().browse(htmlFile.toURI());
+		} catch (IOException e) {	
+			e.printStackTrace();
+		}
+
 	}
+	
+	public void Sendmail(){
+		//String htmlFilePath = "help/index.html"; // path to help file
+		//File htmlFile = new File(htmlFilePath);
+		        // open the default web browser for the HTML page
+		String message = "mailto:np.teku@gmail.com?subject=MessagefromPaperDB&body=Help!"; 
+		URI uri = URI.create(message); 
+		try {
+			Desktop.getDesktop().mail(uri);
+		} catch (IOException e) {	
+			e.printStackTrace();
+		}
+
+	}
+	/**
+	 * Opens the help online website from help menu commented for now!
+	 */
+	
+//	public void openPage(){
+//	       try {
+//	         String url = "https://teknepal.com/paperHelp/";
+//	         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+//	       }
+//	       catch (java.io.IOException e) {
+//	           System.out.println(e.getMessage());
+//	       }
+//	   
+//	}
 
 
 	@Override
