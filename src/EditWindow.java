@@ -1,10 +1,17 @@
-
-
 /**
- * ISTE 330 Part 3
- * @author  Tek, Qiaoran, Chanvi
- * Professor: Micheal Floeser
- * A class for Edit Window
+ * <h1>Paper Database Data</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b> Edit Window Class </b> is a class that provides admin and faculty the screen to 
+ * edit the searched paper and save the paper
+ * It implements the frame screen for edit window and performs actions based on action listeners
+ * 
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since 2015-12-16 
  */
 
 import java.awt.BorderLayout;
@@ -36,7 +43,7 @@ public class EditWindow extends JFrame implements ActionListener{
 	private PaperDatabase paperDb = new PaperDatabase();
 	
 /**
- * creating dialog for edit page
+ * This methods creates dialog for edit page
  */
 	public EditWindow() {
 		setTitle("Edit Window");
@@ -97,8 +104,10 @@ public class EditWindow extends JFrame implements ActionListener{
 		txaAbstract.setPreferredSize(new Dimension(200, 250));
 		
 	}
-	
-	//perform action when clear, search or login button is clicked
+/*This method allows the admin and faculty to edit and save the paper
+ * (non-Javadoc)
+ * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+ */
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("Cancel")) {
 		dispose();

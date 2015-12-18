@@ -1,8 +1,21 @@
-
+/**
+ * <h1>Paper Database Data</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b>Person Class </b> is a class that provides accessors and mutators 
+ * for attributes in person class object declared
+ * 
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since 2015-12-16 
+ */
 
 public class Person
 {
-     //Equipment    table.
+	//Attributes declared
         private String id;
         private String fname;
         private String lname;
@@ -19,15 +32,26 @@ public class Person
         public Person()
         {
         }
-        
+     // constructor with, pDatabase parameters
         public Person(String id, PaperDatabase pDatabase)
         {
                 this.id = id;
                 this.myPaperDB = pDatabase;
         }
         
-       
-    public Person(String id, String fname, String lname, String username, String email, String role, String pass_salt, String pass_md5, PaperDatabase pDatabase)
+       /**
+        * constructor
+        * @param id
+        * @param fname
+        * @param lname
+        * @param username
+        * @param email
+        * @param role
+        * @param pass_salt
+        * @param pass_md5
+        * @param pDatabase
+        */
+        public Person(String id, String fname, String lname, String username, String email, String role, String pass_salt, String pass_md5, PaperDatabase pDatabase)
         {
                 
                 this.id = id;

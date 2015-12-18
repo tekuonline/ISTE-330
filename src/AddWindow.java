@@ -1,9 +1,18 @@
 
+
 /**
- * ISTE 330 Part 3
- * @author  Tek, Qiaoran, Chanvi
- * Professor: Micheal Floeser
- * A class for Edit Window
+ * <h1>Paper Database</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b>Add Window </b> is a class that implements the
+ * method through which the admin and faculty can add new userpaper to the paper database application
+ *  and the add paper screen frame is been created using this class and action event listeners.
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since   2015-12-16 
  */
 
 import java.awt.BorderLayout;
@@ -32,6 +41,10 @@ public class AddWindow extends JFrame implements ActionListener {
 	public JTextArea txaAbstract;
 	private PaperDatabase paperDb = new PaperDatabase();
 
+	
+/**
+ * Setting the frame window for the add paper screen 
+ */
 	public AddWindow() {
 		setTitle("Edit Window");
 		setBounds(100, 100, 585, 369);
@@ -77,13 +90,14 @@ public class AddWindow extends JFrame implements ActionListener {
 
 	}
 
-	/*
-	 * //perform action when clear, search or login button is clicked
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+
+/* This method saves the newly added paper unto database
+ * and performs action when clear, search or login button is clicked
+ * (non-Javadoc)
+ * 
+ * @see
+ * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+ */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand() == ("Cancel")) {
 			dispose();

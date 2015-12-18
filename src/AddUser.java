@@ -14,9 +14,18 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
- * 
- * @author tek, Qioaran,Chanvi
- *
+ * <h1>Paper Database</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b>Add User </b> is a class that implements the
+ * method through which the admin can add new user to the paper database application
+ *  and the add user screen frame is been created using this class and action event listeners.
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since   2015-12-16 
  */
 public class AddUser extends JFrame implements ActionListener {
 	private PaperDatabase paperDb = new PaperDatabase();

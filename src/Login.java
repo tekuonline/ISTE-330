@@ -1,10 +1,16 @@
-
-
 /**
- * ISTE 330 Part 3
- * @author  Tek, Qiaoran, Chanvi
- * Professor: Micheal Floeser
- * A class for Login Window
+ * <h1>Paper Database Data</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b>Login  Class </b> is a class that provides 
+ * a screen to login to the database application  and authenticates the user.
+ * 
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since 2015-12-16 
  */
 
 import java.awt.BorderLayout;
@@ -26,7 +32,7 @@ import javax.swing.JTextField;
 public class Login extends JDialog implements ActionListener {
 
 	/**
-	 * 
+	 * constants 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -90,10 +96,10 @@ public class Login extends JDialog implements ActionListener {
 	public Login() {
 		// TODO Auto-generated constructor stub
 	}
-	/*
-	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+/*This method authenticates the user and checks the role of the logged in user
+ * (non-Javadoc)
+ * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+ */
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getActionCommand() == ("OK")){
 			paperDb.connect();

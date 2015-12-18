@@ -1,9 +1,18 @@
-
 /**
- * ISTE 330 Part 3
- * @author  Tek, Qiaoran, Chanvi
- * Professor: Micheal Floeser
- * A class for Admin Search Window
+ * <h1>Paper Database</h1>
+ * The Paper Database program implements an application that
+ * provides a secure, simple and functional user interface to
+ * browse, update, delete, insert new article instances to the
+ * back end database. 
+ * <p>
+ * <b>Search window Class </b> is a class that implements the
+ *  the various action listener events to build the search window frame
+ *  and elements on the window for the application search 
+ *  GUI
+ * 
+ * @author  Chanvi Kotak, Tek Nepal, Qiaoran Li
+ * @version 1.0
+ * @since   2015-12-16 
  */
 
 import java.awt.BorderLayout;
@@ -87,20 +96,19 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 	private JButton btnuser = new JButton("Add User");
 	private JButton btnlogin = new JButton("Login");
 
-	// Create the frame.
+	// This method Creates the frame for search window page .
 	public SearchWindow() {
 
 		setTitle("Paper Search Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 593, 355);
 		setSize(900, 500);
-		// }
-
-		// public void initialize(){
-
-		/**
-		 * Menu bar content
-		 */
+		
+		
+/**
+ * Menu bar content fields  are set
+ */
+		
 		setJMenuBar(menuBar);
 		menuBar.add(mnFile);
 		mnFile.add(mntmLogout);
@@ -117,18 +125,18 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		mnHelp.add(mntmEmail);
 		mntmEmail.addActionListener(this);
 
-		/**
-		 * Main panel with in the frame
-		 */
+/**
+ * Main panel with in the frame
+ */
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		/**
-		 * North panel called jPanelTitle contains title and greeting message
-		 * for Paper users
-		 */
+/**
+ * North panel called jPanelTitle contains title and greeting message
+ * for Paper users
+ */
 		contentPane.add(jPanelTitle, BorderLayout.NORTH);
 		jPanelTitle.setLayout(new GridLayout(2, 1));
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -138,9 +146,9 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		lblHello.setHorizontalAlignment(SwingConstants.TRAILING);
 		jPanelTitle.add(lblHello);
 
-		/**
-		 * West panel: search area
-		 */
+/**
+ * West panel: search area
+ */
 
 		contentPane.add(jPanelSearchArea, BorderLayout.WEST);
 		jPanelSearchArea.setLayout(new GridLayout(4, 2));
@@ -162,9 +170,9 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		lblMessage.setForeground(Color.RED);
 		jPanelSearchArea.add(lblMessage);
 
-		/**
-		 * Bottom button panel
-		 */
+/**
+ * Bottom button panel
+ */
 		contentPane.add(jPanelbottomButton, BorderLayout.SOUTH);
 
 		btnSearch.addActionListener(this);
@@ -187,11 +195,14 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		isPublic();
 
 		model = new DefaultTableModel(null, new String[] { "Select", "ID", "Title", "Abstract", "Citation" }) {
-			/**
-			* 
-			*/
+			
+			
 			private static final long serialVersionUID = 1L;
-
+			
+			/*
+			 * (non-Javadoc)
+			 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+			 */
 			public Class getColumnClass(int c) {
 				switch (c) {
 				case 0:
@@ -216,9 +227,7 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		TableColumnModel colMdl = tableResult.getColumnModel();
 		// put data into the String
 		colMdl.getColumn(0).setPreferredWidth(5);
-		// colMdl.getColumn(1).setPreferredWidth(60);
 		tableResult.setRowHeight(40);
-		// tableResult.setAutoResizeMode(ABORT);
 		JScrollPane scrollPane = new JScrollPane(tableResult);
 		tableResult.setFillsViewportHeight(true);
 		tableResult.getTableHeader().setReorderingAllowed(false);
@@ -249,17 +258,17 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			if (!authorName.isEmpty()) {
 				column.add("person.fname");
 				values.add(txtAuthor.getText().trim());
-				//System.out.println(txtAuthor.getText().trim());
+				
 			}
 			if (!title.isEmpty()) {
 				column.add("title");
 				values.add(txtTitle.getText().trim());
-				//System.out.println(txtTitle.getText().trim());
+				
 			}
 			if (!keyWords.isEmpty()) {
 				column.add("keyword");
 				values.add(txtKeyword.getText().trim());
-				//System.out.println(txtKeyword.getText().trim());
+				
 			}
 			if (authorName.isEmpty() && keyWords.isEmpty() && title.isEmpty()) {
 				column.add("person.fname");
@@ -355,15 +364,16 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 				selectedList.add(model.getValueAt(row, column + 3).toString());
 				selectedList.add(model.getValueAt(row, column + 4).toString());
 				for (int i = 0; i < selectedList.size(); i++) {
-					//System.out.println(selectedList.get(i));
-
+						//test loop do not do anything
 				}
 			} else {
 				selectedPaperID = -1;
 			}
 		}
 	}
-
+/*
+ * This method clears the contents in the display table
+ */
 	private void clearTable() {
 		int rows = model.getRowCount();
 		lblMessage.setText("");
@@ -371,7 +381,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 			model.removeRow(i);
 		}
 	}
-
+/*
+ * This methods set the visibility true for Update, delete,logout,add user, button for the admin
+ * login button is disabled
+ */
 	public void isAdmin() {
 		btnUpdate.setEnabled(true);
 
@@ -388,7 +401,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
 	}
-
+/*
+ * This methods set the visibility true for Update, delete,logout,add user, button for the faculty
+ * login button is disabled
+ */
 	public void isFaculty() {
 		
 		btnUpdate.setEnabled(true);
@@ -404,7 +420,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		lblHello.setText("Hello " +login.userName());
 		lblHello.setForeground(Color.red);
 	}
-
+/*
+ * This methods set the visibility false for Update, delete,logout,add user, button for the public role
+ * login button is enabled
+ */
 	private void isPublic() {
 		btnUpdate.setEnabled(false);
 
@@ -424,7 +443,10 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		
 		lblHello.setForeground(Color.red);
 	}
-	
+/*
+ * This methods set the visibility false for Update, delete,logout,add user, button for the student role
+ * login button is enabled
+ */
 	public void isStudent() {
 		btnUpdate.setEnabled(false);
 
@@ -445,7 +467,7 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 	}
 
 	/**
-	 * Opens the help website from help menu
+	 * Opens the help website localy from help menu
 	 */
 	public void openPage(){
 		String htmlFilePath = "help/index.html"; // path to help file
@@ -459,7 +481,9 @@ public class SearchWindow extends JFrame implements MenuListener, ActionListener
 		}
 
 	}
-	
+	/**
+	 * opens the default mail cleint with populated to, subject lines. 
+	 */
 	public void Sendmail(){
 		//String htmlFilePath = "help/index.html"; // path to help file
 		//File htmlFile = new File(htmlFilePath);
